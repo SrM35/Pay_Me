@@ -1,4 +1,4 @@
-# Programacion_web_proyecto_final
+# Pay_Me (online payment system)
 Members: Danna Cahelca Padilla Nuñez, Jesús Javier Rojo Martínez
 
 ## Version
