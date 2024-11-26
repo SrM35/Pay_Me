@@ -57,7 +57,7 @@ BEGIN
 	IF p_emailUser NOT REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' THEN
 		BEGIN
 			SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'FORMATO DE CORREO ELECTRONICO NO VALIDO';
+            SET MESSAGE_TEXT = 'Sorry, Not valid email format, try again please!';
 		END;
     END IF;
 
