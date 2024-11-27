@@ -8,15 +8,17 @@ CREATE TABLE Account(
     idAccount CHAR(6) NOT NULL PRIMARY KEY,
     nameUser VARCHAR(50) NOT NULL,
     lastNameUser VARCHAR(50) NOT NULL,
-    emailUser VARCHAR(50) NOT NULL,
+    emailUser VARCHAR(50) NOT NULL UNIQUE,
     passwordUser varchar(50) NOT NULL
 );
 
 DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    numberCard VARCHAR(50) NOT NULL,
-    nameCard VARCHAR(50) NOT NULL
+    -- saldo float not null,
+    numberCard VARCHAR(16) NOT NULL,
+    nameCardOwner VARCHAR(50) NOT NULL,
+    securityNumbers CHAR(3) NOT NULL
 );
 
 DROP TABLE IF EXISTS Payments;
@@ -51,8 +53,8 @@ CREATE PROCEDURE SP_CREATE_ACCOUNT(
 )
 BEGIN
 
-		DECLARE idGenerator CHAR(6);
-        SET idGenerator = SUBSTRING(SHA1(RAND()), 1, 6);
+	DECLARE idGenerator CHAR(6);
+    SET idGenerator = SUBSTRING(SHA1(RAND()), 1, 6);
 
 	IF p_emailUser NOT REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' THEN
 		BEGIN
@@ -66,8 +68,24 @@ BEGIN
 END //
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS SP_ADD_CARD;
+DELIMITER $$
+CREATE PROCEDURE SP_ADD_CARD(
+IN p_numberCard VARCHAR(16), 
+IN p_nameCardOwner VARCHAR(50), 
+IN p_securityNumbers CHAR(3))
+	BEGIN
+		INSERT INTO Cards(numberCard, nameCardOwner, securityNumbers) VALUES (p_numberCard, p_nameCardOwner, p_securityNumbers);
+    END$$
+DELIMITER ;
+
 CALL SP_CREATE_ACCOUNT('Juan', 'Escutia', 'JuanE@gmail.com', '123456789');
 CALL SP_CREATE_ACCOUNT('Pedro', 'Perez', 'pedroperez@gmail.com', 'pepepecas5144');
 CALL SP_CREATE_ACCOUNT('Carlos', 'Villagran', 'CarlosV@gmail.com', 'CarVill12');
 
+CALL SP_ADD_CARD(1223556879119164, 'Juan Escutia', '123');
+
+SELECT * FROM Cards;
 SELECT * FROM Account;
+
+-- bcrypt // hashear contraseñas en la api
