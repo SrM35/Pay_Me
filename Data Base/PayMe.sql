@@ -6,10 +6,9 @@ USE PayMe;
 DROP TABLE IF EXISTS Account;
 CREATE TABLE Account(
     idAccount CHAR(6) NOT NULL PRIMARY KEY,
-    nameUser VARCHAR(50) NOT NULL,
-    lastNameUser VARCHAR(50) NOT NULL,
+    nameUser VARCHAR(100) NOT NULL,
     emailUser VARCHAR(50) NOT NULL UNIQUE,
-    passwordUser varchar(50) NOT NULL
+    passwordUser varchar(100) NOT NULL
 );
 
 DROP TABLE IF EXISTS Cards;
@@ -46,10 +45,9 @@ CREATE TABLE Trasfers(
 DROP PROCEDURE IF EXISTS SP_CREATE_ACCOUNT;
 DELIMITER //
 CREATE PROCEDURE SP_CREATE_ACCOUNT(
-    IN p_nameUser VARCHAR(50),
-    IN p_lastNameUser VARCHAR(50),
+    IN p_nameUser VARCHAR(100),
     IN p_emailUser VARCHAR(50),
-    IN p_passwordUser VARCHAR(50)
+    IN p_passwordUser VARCHAR(100)
 )
 BEGIN
 
@@ -63,8 +61,8 @@ BEGIN
 		END;
     END IF;
 
-    INSERT INTO Account(idAccount, nameUser, lastNameUser, emailUser, passwordUser) 
-    VALUES (idGenerator, p_nameUser, p_lastNameUser, p_emailUser, SHA1(p_passwordUser));
+    INSERT INTO Account(idAccount, nameUser, emailUser, passwordUser) 
+    VALUES (idGenerator, p_nameUser, p_emailUser, p_passwordUser);
 END //
 DELIMITER ;
 
@@ -72,16 +70,26 @@ DROP PROCEDURE IF EXISTS SP_ADD_CARD;
 DELIMITER $$
 CREATE PROCEDURE SP_ADD_CARD(
 IN p_numberCard VARCHAR(16), 
-IN p_nameCardOwner VARCHAR(50), 
+IN p_nameCardOwner VARCHAR(100), 
 IN p_securityNumbers CHAR(3))
 	BEGIN
 		INSERT INTO Cards(numberCard, nameCardOwner, securityNumbers) VALUES (p_numberCard, p_nameCardOwner, p_securityNumbers);
     END$$
 DELIMITER ;
 
-CALL SP_CREATE_ACCOUNT('Juan', 'Escutia', 'JuanE@gmail.com', '123456789');
-CALL SP_CREATE_ACCOUNT('Pedro', 'Perez', 'pedroperez@gmail.com', 'pepepecas5144');
-CALL SP_CREATE_ACCOUNT('Carlos', 'Villagran', 'CarlosV@gmail.com', 'CarVill12');
+DROP PROCEDURE IF EXISTS SP_LOGIN;
+DELIMITER $$
+CREATE PROCEDURE SP_LOGIN(l_emailUser VARCHAR(50), l_passwordUser VARCHAR(100))
+	BEGIN
+		SELECT * FROM Account WHERE emailUser = l_emailUser AND passwordUser = l_passwordUser;
+    END$$
+DELIMITER ;
+
+
+CALL SP_CREATE_ACCOUNT('Juan Escutia', 'JuanE@gmail.com', '123456789');
+CALL SP_CREATE_ACCOUNT('Pedro Perez', 'pedroperez@gmail.com', 'pepepecas5144');
+CALL SP_CREATE_ACCOUNT('Carlos Villagran', 'CarlosV@gmail.com', 'CarVill12');
+
 
 CALL SP_ADD_CARD(1223556879119164, 'Juan Escutia', '123');
 
