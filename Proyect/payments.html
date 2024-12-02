@@ -57,15 +57,15 @@
                             </div>
                         </div>
                      <div class="container-actions">
-                     <p class="email">Payment method</p>
-                     <select name="method" id="periodo" class="option">
-                        <option value="" disabled selected>Available balance</option>
-                         <option value="dave">2</option>
-                         <option value="pumpernickel">3</option>
-                    </select>
-                        <p class="amount">Amount to transfer<p>
-                        <input type="number" placeholder="0.00" class="amount-input" step="0.01" min="0">
-                    <button class="action-btn">Make payment</button>
+                        <p class="email">Payment method</p>
+                        <select id="payment-method" class="option">
+                            <option value="" disabled selected>Available balance</option>
+                            <option value="method1">Method 1</option>
+                            <option value="method2">Method 2</option>
+                        </select>
+                        <p class="amount">Amount to pay</p>
+                        <input type="number" id="amount-input" placeholder="0.00" class="amount-input" step="0.01" min="0" required>
+                        <button id="make-payment-btn" class="action-btn">Make payment</button>
                 </div>
             </div>
     </div>     

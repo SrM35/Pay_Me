@@ -58,13 +58,13 @@
                             </div>
                         </div>
                      <div class="container-actions">
-                     <p class="email">Recipient email</p>
-                        <input type="text" placeholder="example@e-mail.com">
-                        <p class="amount">Amount to transfer<p>
-                        <input type="number" placeholder="0.00" class="amount-input" step="0.01" min="0">
-                      <p class="message">Message</p>
-                      <input type="text" placeholder="Write a message" class="message-input">
-                    <button class="action-btn">Make transfer</button>
+                    <p class="email">Recipient email</p>
+                    <input type="text" id="recipient-email" placeholder="example@e-mail.com" required>
+                    <p class="amount">Amount to transfer</p>
+                    <input type="number" id="transfer-amount" placeholder="0.00" class="amount-input" step="0.01" min="0" required>
+                    <p class="message">Message</p>
+                    <input type="text" id="transfer-message" placeholder="Write a message" class="message-input">
+                    <button id="make-transfer-btn" class="action-btn">Make transfer</button>
                 </div>
             </div>
     </div>     
