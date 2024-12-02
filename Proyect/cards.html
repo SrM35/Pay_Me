@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Card</title>
+    <link rel="stylesheet" href="assets/cards.css">
+</head>
+<body>
+    <div class="container-page">
+        <header>
+            <nav class="navbar">
+                <div class="nav-list">
+                    <div class="logo"><a href="#">PAY-ME</a></div>
+                    <ul class="nav-items">
+                        <li><img src="images/elJoji.jpg" alt="Profile picture" class="cta"></li>
+                        <li><a href="#" class="cta1">Username</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main class="main-content">
+            <nav class="side-bar">
+                <a href="#" class="sidebar-item">
+                    <img id ="home-icon" src="images/home.png" alt="Go to Home page" class="sidebar-icon">
+                    <span class="sidebar-text">Home</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <img id ="historial-icon" src="images/historial.png" alt="View history" class="sidebar-icon">
+                    <span class="sidebar-text">Historial</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <img id="transfer-icon" src="images/tansfer.png" alt="Transfer funds" class="sidebar-icon">
+                    <span class="sidebar-text">Transfer</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <img id="cards-icon" src="images/card.png" alt="View cards" class="sidebar-icon">
+                    <span class="sidebar-text">Cards</span>
+                </a>
+                <a href="#" class="sidebar-item">
+                    <img id="payments-icon" src="images/payment.png" alt="Make payments" class="sidebar-icon">
+                    <span class="sidebar-text">Payments</span>
+                </a>
+                <a href="index.html" class="sidebar-item">
+                    <img id="index-icon" src="images/logout.png" alt="Log out" class="sidebar-icon">
+                    <span class="sidebar-text">Log out</span>
+                </a>
+            </nav>
+            <div class="content">
+                <div class="card-container">
+                    <div class="card">
+                        <div class="total-balance">
+                            <div>Card number</div>
+                            <div>....  ....  ....  ....</div>
+                        </div>
+                        <div class="owner">
+                            <div>Owner</div>
+                            <div>First name Last name</div>
+                            <div>MM/YY</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Card number</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9123 4567" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="last-name">Last name</label>
+                    <input type="text" id="last-name" required>
+                </div>
+                
+                <div class="form-group date">
+                    <div class="text">
+                        <label for="expiration-date">Expiration date</label>
+                        <label  for="cvv" class="cvv">CVV</label>
+                    </div>
+                    <div class="date-input">
+                        <input type="text" id="expiration-date" placeholder="noviembre de 2034" required>
+                        <input type="text" id="cvv" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+                <button class="action-btn">Make payment</button>
+            </div>
+        </main>
+    </div>
+    <script src="js/functionality.js"></script>
+</body>
+</html>

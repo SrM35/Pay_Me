@@ -94,8 +94,14 @@ header {
 .tittle{
     font-size: 50px;
     color: #000000;
+    margin-top: 5rem;
 }
-
+.tittle2{
+    font-size: 50px;
+    color: #000000;
+    margin-top: 0.2rem;
+    margin-left: 0.5rem;
+}
 .avatar-group {
   display: flex;
   align-items: center;
@@ -134,7 +140,7 @@ header {
 .stats {
   display: flex;
   gap: 1rem;
-  margin-left: 20px;
+  margin-left: 0.5rem;
 }
 
 .stat h2{
@@ -147,7 +153,7 @@ header {
 .btn-group{
     display: flex;
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 0.5rem;
 
 }
 .btn{
@@ -207,6 +213,7 @@ header {
   margin-top: 10rem;
   gap: 1rem;
   padding: 10px 15rem;
+  height: 400%;
 }
 
 .container-2 .tittle {
@@ -221,6 +228,7 @@ header {
   justify-content: space-between;
   gap: 5px;
   margin-top: 5rem;
+  margin-bottom:10rem;
 }
 
 .card {
