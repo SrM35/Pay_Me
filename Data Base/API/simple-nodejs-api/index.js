@@ -32,7 +32,7 @@ app.get('/Accounts', async (req, res) => {
     }
 });
 
-app.post('/addAccount', async (req, res) =>{
+app.post('/createAccount', async (req, res) =>{
     let db;
     try {
         const { nameUser, emailUser, passwordUser } = req.body;
@@ -80,10 +80,10 @@ app.get('/Cards', async (req, res) => {
 app.post('/addCard', async (req, res) =>{
     let db;
     try {
-        const { numberCard, nameCardOwner, securityNumbers } = req.body;
+        const {balance, numberCard, nameCardOwner, securityNumbers, idAccount} = req.body;
         
         db = await connect();
-        const query = `CALL SP_ADD_CARD(${numberCard}, '${nameCardOwner}', '${securityNumbers}')`;
+        const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${securityNumbers}', '${idAccount}')`;
         const [rows] = await db.execute(query);
         console.log(rows);
 
