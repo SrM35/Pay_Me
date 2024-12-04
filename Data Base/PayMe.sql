@@ -168,20 +168,28 @@ BEGIN
 END// 
 DELIMITER ;
 
-SELECT * FROM Cards;
-SELECT * FROM Account;
-SELECT * FROM Transfers;
-
 CREATE VIEW existingAccounts AS
 SELECT * FROM Account;
 
+CREATE VIEW existingCards AS
+SELECT * FROM Cards;
+
+CREATE VIEW transferences AS
+SELECT * FROM Transfers;
+
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
-<<<<<<< HEAD
-GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'loca
-=======
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
+GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
+GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
+FLUSH PRIVILEGES;
+
+SELECT * FROM Cards;
+/*
+=======
+
 <<<<<<< HEAD
 
 >>>>>>> a74808f4e2e9e79eca787d2ae08fa65342f47dd3
 =======
 >>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
+*/
