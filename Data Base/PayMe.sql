@@ -102,7 +102,18 @@ DROP PROCEDURE IF EXISTS SP_LOGIN;
 DELIMITER $$
 CREATE PROCEDURE SP_LOGIN(l_emailUser VARCHAR(50), l_passwordUser VARCHAR(100))
 	BEGIN
-		SELECT * FROM Account WHERE emailUser = l_emailUser AND passwordUser = l_passwordUser;
+		 DECLARE v_contrasena_db VARCHAR(255);
+
+		SELECT passwordUser INTO v_contrasena_db
+		FROM Account
+		WHERE emailUser = l_emailUser;
+
+    IF v_contrasena_db = l_passwordUser THEN
+        SIGNAL SQLSTATE '01000';
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'pipipipip';
+    END IF;
     END$$
 DELIMITER ;
 
@@ -157,11 +168,6 @@ BEGIN
 END// 
 DELIMITER ;
 
-CALL SP_CREATE_ACCOUNT('Juan Escutia', 1000.0, 'JuanEsc@gmail.com', 'pipipupu');
-CALL SP_CREATE_ACCOUNT('Rodolfo', 0.0, 'Rudolf21@gmail.com', 'pipipupu');
-
-CALL SP_TRANSFERE('JuanEsc@gmail.com', 'Rudolf21@gmail.com', 100.0);
-
 SELECT * FROM Cards;
 SELECT * FROM Account;
 SELECT * FROM Transfers;
@@ -171,4 +177,3 @@ SELECT * FROM Account;
 
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
-
