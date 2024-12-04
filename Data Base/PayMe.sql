@@ -18,6 +18,7 @@ CREATE TABLE Cards(
     balance FLOAT NOT NULL,
     numberCard VARCHAR(16) NOT NULL,
     nameCardOwner VARCHAR(100) NOT NULL,
+    expirationDate DATE NOT NULL,
     securityNumbers CHAR(3) NOT NULL UNIQUE,
     idAccount CHAR(6) NOT NULL,
     FOREIGN KEY (idAccount) REFERENCES Account(idAccount) ON DELETE CASCADE
@@ -33,29 +34,15 @@ CREATE TABLE Payments(
     FOREIGN KEY (idCard) REFERENCES Cards(idCard),
     FOREIGN KEY (idAccount) REFERENCES Account(idAccount)
 );
-/*
-DROP TABLE IF EXISTS cardTransfers;
-CREATE TABLE cardTransfers(
-    idTransfer INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idAccount CHAR(6) NOT NULL,
-    typeTransfer VARCHAR(100) NOT NULL,
-    idCard INT NOT NULL,
-    dateTransfer DATE NOT NULL,
-    timeTransfer TIME NOT NULL,
-    amountTransfer DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (idCard) REFERENCES Cards(idCard),
-    FOREIGN KEY (idAccount) REFERENCES Account(idAccount)
-);
-*/
+
 DROP TABLE IF EXISTS Transfers;
 CREATE TABLE Transfers(
     idTransfer INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    idAccount CHAR(6) NOT NULL,
-    typeTransfer VARCHAR(100) NOT NULL,
+    emailUser VARCHAR(50) NOT NULL,
     dateTransfer DATE NOT NULL,
     timeTransfer TIME NOT NULL,
     amountTransfer DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (idAccount) REFERENCES Account(idAccount)
+    FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
 
 DELIMITER //
@@ -101,12 +88,13 @@ DELIMITER $$
 CREATE PROCEDURE SP_ADD_CARD(
 IN p_balance FLOAT,
 IN p_numberCard VARCHAR(16), 
-IN p_nameCardOwner VARCHAR(100), 
+IN p_nameCardOwner VARCHAR(100),
+IN p_expirationDate DATE,
 IN p_securityNumbers CHAR(3),
 IN p_idAccount CHAR(6))
 	BEGIN
     
-		INSERT INTO Cards(balance, numberCard, nameCardOwner, securityNumbers, idAccount) VALUES (p_balance, p_numberCard, p_nameCardOwner, p_securityNumbers, p_idAccount);
+		INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
     END$$
 DELIMITER ;
 
@@ -120,9 +108,8 @@ DELIMITER ;
 
 DROP PROCEDURE IF EXISTS SP_TRANSFERE;
 DELIMITER //
-CREATE PROCEDURE SP_TRANSFERE(IN idAccount_origin CHAR(6), IN idAccount_destiny CHAR(6), IN _amount FLOAT)
+CREATE PROCEDURE SP_TRANSFERE(IN emailUser_origin VARCHAR(50), IN emailUser_destiny VARCHAR(50), IN _amount FLOAT)
 BEGIN 
-	DECLARE type_transfer VARCHAR(100);
 	DECLARE amount_origin FLOAT;
     DECLARE amount_destiny FLOAT;
 
@@ -133,41 +120,39 @@ BEGIN
         SET MESSAGE_TEXT = 'The amount to transfer must be greater than 0';
 	END IF;
     
-    IF(SELECT COUNT(idAccount) FROM Account WHERE idAccount = idAccount_origin) = 0 THEN 
+    IF(SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_origin) = 0 THEN 
 		ROLLBACK;
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Origin account does not exist';
 	END IF;
     
-    IF(SELECT COUNT(idAccount) FROM Account WHERE idAccount = idAccount_destiny) = 0 THEN
+    IF(SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_destiny) = 0 THEN
 		ROLLBACK;
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Destiny account does not exist';
 	END IF;
     
-    IF idAccount_origin = idAccount_destiny THEN
+    IF emailUser_origin = emailUser_destiny THEN
 		ROLLBACK;
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Origin account is equal to destiny account';
     END IF;
     
-    SELECT balance INTO amount_origin FROM Account WHERE idAccount = idAccount_origin;
+    SELECT balance INTO amount_origin FROM Account WHERE emailUser = emailUser_origin;
     IF amount_origin < _amount THEN
 		ROLLBACK;
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'insufficient balance';
     END IF;
     
-    SET type_transfer = 'Account transfere';
-    
-    SELECT balance INTO amount_destiny FROM Account WHERE idAccount = idAccount_destiny;
+    SELECT balance INTO amount_destiny FROM Account WHERE emailUser = emailUser_destiny;
     
     SET amount_origin = amount_origin - _amount;
     SET amount_destiny = amount_destiny + _amount;
     
-    UPDATE Account SET balance = amount_origin WHERE idAccount = idAccount_origin;
-    UPDATE Account SET balance = amount_destiny WHERE idAccount = idAccount_destiny;
-    INSERT INTO Transfers(idAccount, typeTransfer, dateTransfer, timeTransfer, amountTransfer) VALUES (idAccount_origin, type_transfer,  CURDATE(), CURTIME(), _amount);
+    UPDATE Account SET balance = amount_origin WHERE emailUser = emailUser_origin;
+    UPDATE Account SET balance = amount_destiny WHERE emailUser = emailUser_destiny;
+    INSERT INTO Transfers(emailUser, dateTransfer, timeTransfer, amountTransfer) VALUES (emailUser_origin,  CURDATE(), CURTIME(), _amount);
     COMMIT;
 END// 
 DELIMITER ;
@@ -175,11 +160,14 @@ DELIMITER ;
 CALL SP_CREATE_ACCOUNT('Juan Escutia', 1000.0, 'JuanEsc@gmail.com', 'pipipupu');
 CALL SP_CREATE_ACCOUNT('Rodolfo', 0.0, 'Rudolf21@gmail.com', 'pipipupu');
 
-CALL SP_TRANSFERE('EL6965', 'EV6500', 50.0);
+CALL SP_TRANSFERE('JuanEsc@gmail.com', 'Rudolf21@gmail.com', 100.0);
 
 SELECT * FROM Cards;
 SELECT * FROM Account;
 SELECT * FROM Transfers;
 
-SELECT * FROM Account WHERE idAccount = 'EL6965';
-SELECT * FROM Transfers WHERE idAccount = 'EL6965';
+CREATE VIEW existingAccounts AS
+SELECT * FROM Account;
+
+CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
+GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'loca

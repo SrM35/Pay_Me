@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const routes = {
         'redirect-btn': 'login.html',
-        'signIn-btn': 'dashboard.html',
+       // 'signIn-btn': 'dashboard.html',
         'signUp-btn': 'register.html',
         'create-btn': 'dashboard.html',
         'home-icon': 'dashboard.html',
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'make-transfer-btn1': 'transfer.html',
         'make-payment-btn1': 'payments.html',
         'add-card-btn1': 'cards.html',
-    }; 
+    };
 
     Object.entries(routes).forEach(([id, path]) => {
         const element = document.getElementById(id);
@@ -27,4 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
 });
+
+
+

@@ -61,6 +61,11 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="balance">Balance</label>
+                    <input type="number" id="balance" placeholder="Balance" required>
+                </div>
+                
+                <div class="form-group">
                     <label for="card-number">Card number</label>
                     <input type="text" id="card-number" placeholder="1234 5678 9123 4567" required>
                 </div>
@@ -70,25 +75,22 @@
                     <input type="text" id="name" placeholder="First Name" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="last-name">Last name</label>
-                    <input type="text" id="last-name" placeholder="Last Name" required>
-                </div>
-                
                 <div class="form-group date">
                     <div class="text">
                         <label for="expiration-date">Expiration date</label>
                         <label for="cvv" class="cvv">CVV</label>
                     </div>
                     <div class="date-input">
-                        <input type="month" id="expiration-date" name="expiration-date" required>
+                        <input type="date" id="expiration-date" name="expiration-date" required>
                         <input type="text" id="cvv" placeholder="123" maxlength="3" required>
                     </div>
                 </div>
                 <button id="add-card-btn" class="action-btn">Add Card</button>
+                
             </div>
         </main>
     </div>
-    <script src="js/functionality.js"></script>
+    <script src="js/cards.js"></script>
+    <!-- <script src="js/functionality.js"></script> -->
 </body>
 </html>
