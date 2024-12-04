@@ -170,4 +170,9 @@ CREATE VIEW existingAccounts AS
 SELECT * FROM Account;
 
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
+<<<<<<< HEAD
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'loca
+=======
+GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
+
+>>>>>>> a74808f4e2e9e79eca787d2ae08fa65342f47dd3
