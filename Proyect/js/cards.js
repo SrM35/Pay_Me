@@ -1,92 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
     const addCardBtn = document.getElementById('add-card-btn');
-    addCardBtn.addEventListener('click', addCard);
-});
+    const form = document.getElementById('credit-card-form');
 
-async function addCard() {
-    const balance = document.getElementById('balance').value;
-    const numberCard = document.getElementById('card-number').value.replace(/\s/g, '');
-    const nameCardOwner = document.getElementById('name').value;
-    const expirationDate = document.getElementById('expiration-date').value;
-    const cvv = document.getElementById('cvv').value;
-    
-   
-   // const idAccount = '123456'; 
+    console.log('DOM fully loaded');
 
-    const cardData = {
-        balance,
-        numberCard,
-        nameCardOwner,
-        securityNumbers: cvv,
-       // idAccount
-    };
+    // if (!addCardBtn) {
+    //     console.error("El botón 'add-card-btn' no se encuentra en el DOM.");
+    //     return;
+    // }
 
-    try {
-        const response = await fetch('/addCard', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cardData),
-        });
+    // console.log('Botón encontrado:', addCardBtn);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+    addCardBtn.addEventListener('click', handleAddCard);
+
+    async function handleAddCard() {
+        console.log('Botón clickeado');
+        addCardBtn.disabled = true;
+        addCardBtn.textContent = 'Agregando...';
+
+        const balance = document.getElementById('balance').value;
+        const numberCard = document.getElementById('card-number').value.replace(/\s/g, '');
+        const nameCardOwner = document.getElementById('name').value;
+        const expirationDate = document.getElementById('expiration-date').value;
+        const cvv = document.getElementById('cvv').value;
+
+        if (!validateForm(balance, numberCard, nameCardOwner, expirationDate, cvv)) {
+            addCardBtn.disabled = false;
+            addCardBtn.textContent = 'Agregar Tarjeta';
+            return;
         }
 
-        const result = await response.json();
-        console.log('Card added successfully:', result);
-        alert('Card added successfully!');
+        const cardData = {
+            balance,
+            numberCard,
+            nameCardOwner,
+            securityNumbers: cvv,
+        };
+
+        try {
+            const response = await fetch('/addCard', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(cardData),
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Tarjeta agregada exitosamente:', result);
+            alert('¡Tarjeta agregada exitosamente!');
+            form.reset();
+        } catch (error) {
+            console.error('Error al agregar la tarjeta:', error);
+            alert('Error al agregar la tarjeta. Por favor, intente de nuevo.');
+        } finally {
+            addCardBtn.disabled = false;
+            addCardBtn.textContent = 'Agregar Tarjeta';
+        }
+    }
+
+    function validateForm(balance, numberCard, nameCardOwner, expirationDate, cvv) {
+        if (!balance || isNaN(parseFloat(balance))) {
+            alert('Por favor, ingrese un balance válido.');
+            return false;
+        }
+        if (numberCard.length !== 16) {
+            alert('El número de tarjeta debe tener 16 dígitos.');
+            return false;
+        }
+        if (!nameCardOwner) {
+            alert('Por favor, ingrese el nombre del titular de la tarjeta.');
+            return false;
+        }
         
-    } catch (error) {
-        console.error('Error adding card:', error);
-        alert('Error adding card. Please try again.');
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const addCardBtn = document.getElementById('add-card-btn');
-    addCardBtn.addEventListener('click', addCard);
-});
-
-async function addCard() {
-    const balance = document.getElementById('balance').value;
-    const numberCard = document.getElementById('card-number').value.replace(/\s/g, '');
-    const nameCardOwner = document.getElementById('name').value;
-    const expirationDate = document.getElementById('expiration-date').value;
-    const cvv = document.getElementById('cvv').value;
-    
-
-    //const idAccount = '123456'; 
-
-    const cardData = {
-        balance,
-        numberCard,
-        nameCardOwner,
-        securityNumbers: cvv,
-        //idAccount
-    };
-
-    try {
-        const response = await fetch('/addCard', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(cardData),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (cvv.length !== 3) {
+            alert('El CVV debe tener 3 dígitos.');
+            return false;
         }
-
-        const result = await response.json();
-        console.log('Card added successfully:', result);
-        alert('Card added successfully!');
-       
-    } catch (error) {
-        console.error('Error adding card:', error);
-        alert('Error adding card. Please try again.');
+        return true;
     }
-}
-
+});
