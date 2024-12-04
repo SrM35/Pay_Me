@@ -1,50 +1,77 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const createBtn = document.getElementById('create-btn');
-    createBtn.addEventListener('click', createAccount);
+    const createBtn = document.getElementById('create-btn'); 
 
-    const signInBtn = document.getElementById('signIn-btn');
-    signInBtn.addEventListener('click', () => {
-        window.location.href = 'login.html';
-    });
-});
+    createBtn.addEventListener('click', handleCreateAccount);
 
-async function createAccount() {
-    const nameUser = document.getElementById('first-name').value;
-    const emailUser = document.getElementById('email').value;
-    const passwordUser = document.getElementById('password').value;
-    const balance = document.getElementById('balance').value;
+    async function handleCreateAccount() {
+        console.log('Botón Create Account clickeado');
 
-    if (!nameUser || !emailUser || !passwordUser || !balance) {
-        alert('Please fill in all fields');
-        return;
-    }
+      
+        const name = document.getElementById('first-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const balance = document.getElementById('balance').value.trim();
+        const password = document.getElementById('password').value.trim();
 
-    const userData = {
-        nameUser,
-        emailUser,
-        passwordUser,
-        balance
-    };
-
-    try {
-        const response = await fetch('/createAccount', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+       
+        if (!validateForm(name, email, balance, password)) {
+            return;
         }
 
-        const result = await response.json();
-        console.log('Account created successfully:', result);
-        alert('Account created successfully! Please log in.');
-        window.location.href = 'login.html';
-    } catch (error) {
-        console.error('Error creating account:', error);
-        alert('Error creating account. Please try again.');
+      
+        const accountData = {
+            nameUser: name,
+            emailUser: email,
+            passwordUser: password,
+        };
+        console.log('Datos de la cuenta:', accountData);
+
+        try {
+         
+            const response = await fetch('http://localhost:3000/createAccount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(accountData),
+            });
+
+           
+            if (!response.ok) {
+                throw new Error(`Error HTTP: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Respuesta del servidor:', result);
+
+            if (result.status === 200) {
+                alert('¡Cuenta creada exitosamente!');
+                window.location.href = 'login.html'; 
+            } else {
+                alert('Error al crear cuenta. Intente de nuevo.');
+            }
+        } catch (error) {
+            console.error('Error al crear la cuenta:', error);
+            alert('Ocurrió un error. Por favor, intente más tarde.');
+        }
     }
-}
+
+    function validateForm(name, email, balance, password) {
+        if (!name) {
+            alert('Por favor, ingrese un nombre.');
+            return false;
+        }
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert('Por favor, ingrese un correo válido.');
+            return false;
+        }
+        if (!balance || isNaN(balance)) {
+            alert('Por favor, ingrese un balance válido.');
+            return false;
+        }
+        if (!password || password.length < 6) {
+            alert('La contraseña debe tener al menos 6 caracteres.');
+            return false;
+        }
+        return true;
+    }
+});
