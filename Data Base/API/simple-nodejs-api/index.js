@@ -37,11 +37,11 @@ app.get('/Accounts', async (req, res) => {
 app.post('/createAccount', async (req, res) =>{
     let db;
     try {
-        const { nameUser, emailUser, passwordUser } = req.body;
+        const { nameUser, balance, emailUser, passwordUser } = req.body;
         bcrypt.hash(passwordUser, 8, async(error, hash) => {
             if (error) throw error;
             db = await connect();
-            const query = `CALL SP_CREATE_ACCOUNT('${nameUser}', '${emailUser}', '${hash}')`;
+            const query = `CALL SP_CREATE_ACCOUNT('${nameUser}', ${balance}, '${emailUser}', '${hash}')`;
             const [rows] = await db.execute(query);
             console.log(rows);
             
@@ -82,10 +82,10 @@ app.get('/Cards', async (req, res) => {
 app.post('/addCard', async (req, res) =>{
     let db;
     try {
-        const {balance, numberCard, nameCardOwner, securityNumbers, idAccount} = req.body;
+        const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
         
         db = await connect();
-        const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${securityNumbers}', '${idAccount}')`;
+        const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
         const [rows] = await db.execute(query);
         console.log(rows);
 

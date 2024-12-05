@@ -112,7 +112,7 @@ CREATE PROCEDURE SP_LOGIN(l_emailUser VARCHAR(50), l_passwordUser VARCHAR(100))
         SIGNAL SQLSTATE '01000';
     ELSE
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'pipipipip';
+        SET MESSAGE_TEXT = 'ERROR, try again!';
     END IF;
     END$$
 DELIMITER ;
