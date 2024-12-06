@@ -100,7 +100,7 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_idAccount CHAR(6)
 )
 BEGIN
-    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumber) 
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers) 
     VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
 END$$
 DELIMITER ;
