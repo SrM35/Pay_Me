@@ -42,6 +42,7 @@ CREATE TABLE Transfers(
     dateTransfer DATE NOT NULL,
     timeTransfer TIME NOT NULL,
     amountTransfer DECIMAL(10,2) NOT NULL,
+    messageTransfer VARCHAR(100) NOT NULL,
     FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
 
@@ -86,40 +87,35 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS SP_ADD_CARD;
 DELIMITER $$
 CREATE PROCEDURE SP_ADD_CARD(
-IN p_balance FLOAT,
-IN p_numberCard VARCHAR(16), 
-IN p_nameCardOwner VARCHAR(100),
-IN p_expirationDate DATE,
-IN p_securityNumbers CHAR(3),
-IN p_idAccount CHAR(6))
-	BEGIN
-    
-		INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
-    END$$
+    IN p_balance FLOAT,
+    IN p_numberCard VARCHAR(16), 
+    IN p_nameCardOwner VARCHAR(100),
+    IN p_expirationDate DATE,
+    IN p_securityNumbers CHAR(3),
+    IN p_idAccount CHAR(6)
+)
+BEGIN
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) 
+    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
+END$$
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS SP_LOGIN;
+
 DELIMITER $$
-CREATE PROCEDURE SP_LOGIN(l_emailUser VARCHAR(50), l_passwordUser VARCHAR(100))
-	BEGIN
-		 DECLARE v_contrasena_db VARCHAR(255);
-
-		SELECT passwordUser INTO v_contrasena_db
-		FROM Account
-		WHERE emailUser = l_emailUser;
-
-    IF v_contrasena_db = l_passwordUser THEN
-        SIGNAL SQLSTATE '01000';
-    ELSE
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ERROR, try again!';
-    END IF;
-    END$$
+CREATE PROCEDURE SP_LOGIN(
+    IN l_emailUser VARCHAR(50)
+)
+BEGIN
+    SELECT  nameUser, passwordUser
+    FROM Account
+    WHERE emailUser = l_emailUser;
+END$$
 DELIMITER ;
+
 
 DROP PROCEDURE IF EXISTS SP_TRANSFERE;
 DELIMITER //
-CREATE PROCEDURE SP_TRANSFERE(IN emailUser_origin VARCHAR(50), IN emailUser_destiny VARCHAR(50), IN _amount FLOAT)
+CREATE PROCEDURE SP_TRANSFERE(IN emailUser_origin VARCHAR(50), IN emailUser_destiny VARCHAR(50), IN _amount FLOAT,IN _message VARCHAR(255))
 BEGIN 
 	DECLARE amount_origin FLOAT;
     DECLARE amount_destiny FLOAT;
@@ -163,7 +159,8 @@ BEGIN
     
     UPDATE Account SET balance = amount_origin WHERE emailUser = emailUser_origin;
     UPDATE Account SET balance = amount_destiny WHERE emailUser = emailUser_destiny;
-    INSERT INTO Transfers(emailUser, dateTransfer, timeTransfer, amountTransfer) VALUES (emailUser_origin,  CURDATE(), CURTIME(), _amount);
+    INSERT INTO Transfers(emailUser, dateTransfer, timeTransfer, amountTransfer) VALUES (emailUser_origin,  CURDATE(), CURTIME(), _amount,_message);
+    
     COMMIT;
 END// 
 DELIMITER ;
