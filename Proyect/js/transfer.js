@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
         const emailUser_origin = localStorage.getItem('email');
 
-     
         const recipientEmail = document.getElementById('recipient-email').value;
         const transferAmount = document.getElementById('transfer-amount').value;
         const transferMessage = document.getElementById('transfer-message').value;

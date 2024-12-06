@@ -197,7 +197,7 @@ app.post('/addCard', async (req, res) => {
     let db;
     try {
         
-        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers } = req.body;
+        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
 
         /*
         if (!idAccount) {
@@ -220,8 +220,8 @@ app.post('/addCard', async (req, res) => {
 
        
         const [result] = await db.execute(
-            'CALL SP_ADD_CARD(?, ?, ?, ?, ?)',
-            [balance, numberCard, nameCardOwner, expirationDate, securityNumbers]
+            'CALL SP_ADD_CARD(?, ?, ?, ?, ?, ?)',
+            [balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount]
         );
 
        

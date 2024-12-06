@@ -25,6 +25,13 @@ CREATE TABLE Cards(
     FOREIGN KEY (idAccount) REFERENCES Account(idAccount) ON DELETE CASCADE
 );
 
+DROP TABLE IF EXISTS debt;
+CREATE TABLE debt(
+    idDebt INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nameCompany VARCHAR(100) NOT NULL,
+    amountToPay DECIMAL(10,2) NOT NULL
+);
+
 DROP TABLE IF EXISTS Payments;
 CREATE TABLE Payments(
     idPayment INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -96,11 +103,12 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_numberCard VARCHAR(16), 
     IN p_nameCardOwner VARCHAR(100),
     IN p_expirationDate DATE,
-    IN p_securityNumbers CHAR(3)
+    IN p_securityNumbers CHAR(3),
+    IN p_idAccount CHAR(6)
 )
 BEGIN
-    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers) 
-    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) 
+    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
 END$$
 DELIMITER ;
 
