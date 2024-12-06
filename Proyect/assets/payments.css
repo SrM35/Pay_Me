@@ -59,6 +59,7 @@ header {
     font-size: 1rem;
     transition: color 0.3s ease;
 }
+
 .cta {
     position: relative;
     left: 2rem; 
@@ -68,7 +69,6 @@ header {
     height: 30px;
     width: 30px;
 }
-
 
 .cta1 {
     color: #ffffff !important;
@@ -85,14 +85,12 @@ header {
 
 .side-bar {
     width: 300px;
-    justify-content: center;
     background-color: #fff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding: 40px;
-   
 }
 
-.sidebar-text{
+.sidebar-text {
     font-size: 20px;
 }
 
@@ -125,8 +123,7 @@ header {
     background-color: #fff;
     width: 60%;
     margin-top: 4rem;
-    margin-left: 5rem;
-    
+    margin-left: 5rem;    
 }
 
 .card { 
@@ -153,6 +150,7 @@ header {
     align-items: flex-start;
     width: 100%;
 }
+
 .container-actions input {
     width: 98%; 
     height: 5rem; 
@@ -170,7 +168,6 @@ header {
     border-radius: 10px; 
     border: 1px solid #ccc; 
     margin: 20px 0;
-
 }
 
 .container-actions button {
@@ -188,8 +185,73 @@ header {
     font-size: 1.5rem; 
     margin-bottom: 1rem; 
 }
-.container-actions button:hover{
+
+.container-actions button:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    background-color:#204F74;
+    background-color: #204F74;
     transform: translateY(-2px);
+}
+
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+        padding: 0 1rem;
+    }
+
+    .side-bar {
+        width: 100%;
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 2rem;
+    }
+
+    .nav-items {
+        flex-direction: column;
+    }
+
+    .nav-items li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    .container-actions input,
+    .container-actions button,
+    .option {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    .container-actions h1 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo a {
+        font-size: 1.2rem;
+    }
+
+    .nav-items li {
+        margin-bottom: 5px;
+    }
+
+    .total-balance {
+        font-size: 1.2rem;
+    }
+
+    .btn-add-card {
+        padding: 0.8rem;
+    }
 }

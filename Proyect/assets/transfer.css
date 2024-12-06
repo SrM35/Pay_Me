@@ -46,7 +46,7 @@ header {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    gap: 10px; 
+    gap: 10px;
 }
 
 .nav-items li {
@@ -59,9 +59,10 @@ header {
     font-size: 1rem;
     transition: color 0.3s ease;
 }
+
 .cta {
     position: relative;
-    left: 2rem; 
+    left: 2rem;
     color: #000000;
     padding: 0.5rem 1rem;
     border-radius: 50%;
@@ -69,18 +70,17 @@ header {
     width: 30px;
 }
 
-
 .cta1 {
     color: #ffffff !important;
     display: block;
-    padding-top: 8px; 
+    padding-top: 8px;
     line-height: 30px;
 }
 
 .main-content {
     display: flex;
-    height: auto; 
-    gap: 2rem; 
+    height: auto;
+    gap: 2rem;
 }
 
 .side-bar {
@@ -89,10 +89,9 @@ header {
     background-color: #fff;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding: 40px;
-   
 }
 
-.sidebar-text{
+.sidebar-text {
     font-size: 20px;
 }
 
@@ -120,78 +119,128 @@ header {
 .content {
     display: flex;
     flex-direction: column;
-    gap: 2rem; 
+    gap: 2rem;
     padding: 2rem;
     background-color: #fff;
     width: 60%;
     margin-top: 4rem;
     margin-left: 5rem;
-    
 }
 
-.card { 
+.card {
     background-color: #6DB4F1;
     border-radius: 12px;
-    padding: 2.5rem 3rem; 
+    padding: 2.5rem 3rem;
     color: white;
     max-width: 400px;
     margin-top: 5px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-    width: 90%; 
-    max-width: none; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 90%;
     transition: transform 0.3s ease;
 }
 
 .total-balance {
     font-size: 1.5rem;
-    margin-bottom: 1rem; 
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
 }
+
 .container-actions input {
-    width: 98%; 
-    height: 5rem; 
-    border-radius: 10px; 
-    border: 1px solid #ccc; 
-    padding: 10px; 
+    width: 98%;
+    height: 5rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
     font-size: 1rem;
 }
 
 .message-input {
-    width: 100%; 
-    height: 5rem; 
-    padding: 15px; 
-    font-size: 1.2rem; 
+    width: 100%;
+    height: 5rem;
+    padding: 15px;
+    font-size: 1.2rem;
     border: 1px solid #ccc;
-    border-radius: 5px; 
+    border-radius: 5px;
 }
+
 .message-input::placeholder {
-    color: #bebebe; 
-    font-size: 1rem; 
+    color: #bebebe;
+    font-size: 1rem;
 }
 
 .container-actions button {
-    width: 100%; 
-    height: 5rem; 
-    border-radius: 10px; 
+    width: 100%;
+    height: 5rem;
+    border-radius: 10px;
     border: none;
     background-color: #6DB4F1;
     color: white;
-    margin-top: 2rem; 
-    font-size: 1.5rem; 
+    margin-top: 2rem;
+    font-size: 1.5rem;
 }
 
 .container-actions p {
-    font-size: 1.5rem; 
-    margin-bottom: 1rem; 
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
 }
-.container-actions button:hover{
+
+.container-actions button:hover {
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    background-color:#204F74;
+    background-color: #204F74;
     transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .side-bar {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .content {
+        width: 100%;
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-items {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .nav-items li {
+        margin-left: 0;
+    }
+
+    .cta {
+        left: 0;
+        margin: 0 5px;
+    }
+
+    .sidebar-item {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    .sidebar-text {
+        font-size: 18px;
+    }
 }
