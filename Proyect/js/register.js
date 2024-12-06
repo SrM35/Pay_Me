@@ -34,6 +34,12 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Cuenta creada exitosamente!');
             localStorage.setItem('username', nameUser);
             localStorage.setItem('balance', balance.toFixed(2));
+
+            console.log('Datos guardados en localStorage:');
+            console.log('Username:', localStorage.getItem('username'));
+            console.log('Balance:', localStorage.getItem('balance'));
+            console.log('Email:', localStorage.getItem('email'));
+            console.log('ID Account:', localStorage.getItem('idAccount'));
             
             window.location.href = 'dashboard.html';
         })

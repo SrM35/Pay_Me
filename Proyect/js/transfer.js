@@ -44,6 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('recipient-email').value = '';
                 document.getElementById('transfer-amount').value = '';
                 document.getElementById('transfer-message').value = '';
+                const balanceElement = document.querySelector('.total-balance div:nth-child(2)');
+                const savedBalance = localStorage.getItem('balance');
+                if (savedBalance && balanceElement) {
+                    const newBalance = parseFloat(savedBalance) - parseFloat(transferAmount);
+                    localStorage.setItem('balance', newBalance.toFixed(2));
+                    balanceElement.textContent = `$${newBalance.toFixed(2)}`;
+                }
+                window.location.href = 'dashboard.html';
             } else {
                 alert('Transfer failed: ' + (result.message || 'Unknown error'));
             }

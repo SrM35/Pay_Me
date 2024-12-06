@@ -21,7 +21,6 @@ app.post('/login', async (req, res) => {
     try {
         const { emailUser, passwordUser } = req.body;
 
-        
         if (!emailUser || !passwordUser) {
             return res.status(400).json({
                 success: false,
@@ -30,13 +29,10 @@ app.post('/login', async (req, res) => {
         }
 
         db = await connect();
-        
        
-        const query = 'SELECT nameUser, passwordUser, balance FROM Account WHERE emailUser = ?';
-
+        const query = 'SELECT nameUser, passwordUser, balance, idAccount FROM Account WHERE emailUser = ?';
         const [rows] = await db.execute(query, [emailUser]);
 
-        
         if (!rows || rows.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -45,6 +41,14 @@ app.post('/login', async (req, res) => {
         }
 
         const user = rows[0];
+        
+        
+        console.log('Datos del usuario de la BD:', {
+            name: user.nameUser,
+            idAccount: user.idAccount,
+            balance: user.balance
+        });
+
         const isPasswordValid = await bcrypt.compare(passwordUser, user.passwordUser);
 
         if (!isPasswordValid) {
@@ -55,16 +59,19 @@ app.post('/login', async (req, res) => {
         }
 
        
-        res.json({
+        const responseData = {
             success: true,
             message: 'Inicio de sesión exitoso',
             user: {
                 name: user.nameUser,
                 email: emailUser,
                 balance: user.balance,
-                idAccount: user.idAccount
+                idAccount: user.idAccount 
             }
-        });
+        };
+
+        console.log('Enviando respuesta:', responseData);
+        res.json(responseData);
 
     } catch (error) {
         console.error('Login error:', error);
@@ -76,6 +83,8 @@ app.post('/login', async (req, res) => {
         if (db) await db.end();
     }
 });
+
+
 
 
 
@@ -148,62 +157,127 @@ app.get('/Cards', async (req, res) => {
 });
 
 
+// app.post('/addCard', async (req, res) => {
+//     let db;
+//     try {
+//         const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
+       
+        
+//         if (securityNumbers.length !== 3) {
+//             return res.status(400).json({
+//                 message: 'CVV must be exactly 3 digits',
+//                 status: 400
+//             });
+//         }
+       
+//         db = await connect();
+//         const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
+//         const [rows] = await db.execute(query);
+//         console.log(rows);
+        
+//         res.json({
+//             data: rows,
+//             status: 200
+//         });
+//     } catch(err) {
+//         console.error(err);
+//         res.status(500).json({
+//             message: err.message,
+//             status: 500
+//         });
+//     } finally {
+//         if(db)
+//             db.end();
+//     }
+// });
+
+// 
+
 app.post('/addCard', async (req, res) => {
     let db;
     try {
-        const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
-       
         
-        if (securityNumbers.length !== 3) {
+        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
+
+        
+        if (!idAccount) {
+            return res.status(400).json({
+                message: 'Account ID is missing',
+                status: 400
+            });
+        }
+
+       
+        if (!securityNumbers || securityNumbers.length !== 3) {
             return res.status(400).json({
                 message: 'CVV must be exactly 3 digits',
                 status: 400
             });
         }
-       
-        db = await connect();
-        const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
-        const [rows] = await db.execute(query);
-        console.log(rows);
+
         
+        db = await connect();
+
+       
+        const [result] = await db.execute(
+            'CALL SP_ADD_CARD(?, ?, ?, ?, ?, ?)',
+            [balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount]
+        );
+
+       
         res.json({
-            data: rows,
+            message: 'Card added successfully',
+            data: result,
             status: 200
         });
-    } catch(err) {
+    } catch (err) {
+       
         console.error(err);
         res.status(500).json({
             message: err.message,
             status: 500
         });
     } finally {
-        if(db)
-            db.end();
+       
+        if (db) db.end();
     }
 });
 
- app.post('/transfere', async (req, res) => {
+
+
+app.post('/transfere', async (req, res) => {
     let db;
-     try {
-         const {  emailUser_destiny, amountTransfer, messageTransfer } = req.body;
+    try {
+        const { emailUser_origin, emailUser_destiny, amountTransfer, messageTransfer } = req.body;
 
-         db = await connect();
-         const query = `CALL SP_TRANSFERE( '${emailUser_destiny}', '${amountTransfer})'`;
-         const [rows] = await db.execute(query);
-         console.log(rows);
+        db = await connect();
 
-         res.json({
-             data: rows,
-             status: 200
-         });
-     } catch (err) {
-         console.error(err);
-     } finally {
-         if (db)
-             db.end();
-     }
- });
+       
+        const [result] = await db.execute(
+            'CALL SP_TRANSFERE(?, ?, ?, ?)',
+            [emailUser_origin, emailUser_destiny, amountTransfer, messageTransfer]
+        );
 
+        res.json({
+            message: 'Transfer completed successfully',
+            status: 200,
+        });
+    } catch (err) {
+        console.error(err);
+
+        if (db) {
+            await db.rollback();
+        }
+
+        res.status(500).json({
+            error: 'An error occurred during the transfer',
+        });
+    } finally {
+        if (db) {
+            db.end();
+        }
+    }
+});
 
 
 app.listen(PORT, () => {

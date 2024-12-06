@@ -1,4 +1,4 @@
--- Active: 1732115424953@@localhost@3306@payme
+"-- Active: 1732115424953@@localhost@3306@payme
 DROP DATABASE IF EXISTS PayMe;
 CREATE DATABASE PayMe;
 USE PayMe;
@@ -12,6 +12,7 @@ CREATE TABLE Account(
     passwordUser VARCHAR(100) NOT NULL
 );
 
+//HOLI
 DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -36,15 +37,19 @@ CREATE TABLE Payments(
 );
 
 DROP TABLE IF EXISTS Transfers;
-CREATE TABLE Transfers(
+
+CREATE TABLE Transfers (
     idTransfer INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     emailUser VARCHAR(50) NOT NULL,
     dateTransfer DATE NOT NULL,
     timeTransfer TIME NOT NULL,
     amountTransfer DECIMAL(10,2) NOT NULL,
     messageTransfer VARCHAR(100) NOT NULL,
+    typeTransfer ENUM('ingreso', 'gasto') NOT NULL,  
+    descriptionTransfer TEXT,                      
     FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
+
 
 DELIMITER //
 CREATE TRIGGER generateId BEFORE INSERT ON Account
@@ -186,7 +191,19 @@ GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
 
+CALL SP_CREATE_ACCOUNT('maria', 1000, 'mariaw@gmail.com', 'password123');
+CALL SP_CREATE_ACCOUNT('juanito', 2000, 'juanito5@gmail.com', 'password456');
+
+CALL SP_TRANSFERE('mariaw@gmail.com', 'juanito5@gmail.com', 500, 'Payment for services');
+
+SELECT * FROM existingAccounts;
+SELECT * FROM existingCards;
+SELECT * FROM transferences;
+
+
 SELECT * FROM Cards;
+SHOW TABLES;
+
 /*
 =======
 
@@ -196,3 +213,4 @@ SELECT * FROM Cards;
 =======
 >>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
 */
+"
