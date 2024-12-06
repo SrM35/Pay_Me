@@ -1,4 +1,3 @@
-"-- Active: 1732115424953@@localhost@3306@payme
 DROP DATABASE IF EXISTS PayMe;
 CREATE DATABASE PayMe;
 USE PayMe;
@@ -12,7 +11,6 @@ CREATE TABLE Account(
     passwordUser VARCHAR(100) NOT NULL
 );
 
-//HOLI
 DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -37,7 +35,6 @@ CREATE TABLE Payments(
 );
 
 DROP TABLE IF EXISTS Transfers;
-
 CREATE TABLE Transfers (
     idTransfer INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     emailUser VARCHAR(50) NOT NULL,
@@ -50,25 +47,22 @@ CREATE TABLE Transfers (
     FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
 
-
-DELIMITER //
+DELIMITER $$
 CREATE TRIGGER generateId BEFORE INSERT ON Account
 FOR EACH ROW
 BEGIN
-	IF NEW.idAccount IS NULL THEN
-		BEGIN
-			SET NEW.idAccount = CONCAT(
+    IF NEW.idAccount IS NULL THEN
+        SET NEW.idAccount = CONCAT(
             CHAR(FLOOR(65 + (RAND() * 26))),
             CHAR(FLOOR(65 + (RAND() * 26))),
             LPAD(FLOOR(RAND() * 99999), 4, '0')
         );
-        END;
     END IF;
-END//
+END$$
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS SP_CREATE_ACCOUNT;
-DELIMITER //
+DELIMITER $$
 CREATE PROCEDURE SP_CREATE_ACCOUNT(
     IN p_nameUser VARCHAR(100),
     IN p_balance FLOAT,
@@ -76,17 +70,13 @@ CREATE PROCEDURE SP_CREATE_ACCOUNT(
     IN p_passwordUser VARCHAR(100)
 )
 BEGIN
-
-	IF p_emailUser NOT REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' THEN
-		BEGIN
-			SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Sorry, not valid email format, try again please!';
-		END;
+    IF p_emailUser NOT REGEXP '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Sorry, not valid email format, try again please!';
     END IF;
 
     INSERT INTO Account(nameUser, balance, emailUser, passwordUser) 
     VALUES (p_nameUser, p_balance, p_emailUser, p_passwordUser);
-END //
+END$$
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS SP_ADD_CARD;
@@ -100,25 +90,23 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_idAccount CHAR(6)
 )
 BEGIN
-    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers) 
-    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount)
+    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
 END$$
 DELIMITER ;
-
 
 DELIMITER $$
 CREATE PROCEDURE SP_LOGIN(
     IN l_emailUser VARCHAR(50)
 )
 BEGIN
-    SELECT  nameUser, passwordUser
+    SELECT nameUser, passwordUser
     FROM Account
     WHERE emailUser = l_emailUser;
 END$$
 DELIMITER ;
 
-
-DELIMITER //
+DELIMITER $$
 CREATE PROCEDURE SP_TRANSFERE(
     IN emailUser_origin VARCHAR(50),
     IN emailUser_destiny VARCHAR(50),
@@ -130,35 +118,31 @@ BEGIN
     DECLARE amount_destiny FLOAT;
 
     START TRANSACTION;
+
     IF _amount <= 0 THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'The amount to transfer must be greater than 0';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'The amount to transfer must be greater than 0';
     END IF;
 
     IF (SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_origin) = 0 THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Origin account does not exist';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Origin account does not exist';
     END IF;
 
     IF (SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_destiny) = 0 THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Destiny account does not exist';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Destiny account does not exist';
     END IF;
 
     IF emailUser_origin = emailUser_destiny THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Origin account is equal to destiny account';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Origin account is equal to destiny account';
     END IF;
 
     SELECT balance INTO amount_origin FROM Account WHERE emailUser = emailUser_origin;
     IF amount_origin < _amount THEN
         ROLLBACK;
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Insufficient balance';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insufficient balance';
     END IF;
 
     SELECT balance INTO amount_destiny FROM Account WHERE emailUser = emailUser_destiny;
@@ -173,7 +157,7 @@ BEGIN
     VALUES (emailUser_origin, CURDATE(), CURTIME(), _amount, _message);
 
     COMMIT;
-END//
+END$$
 DELIMITER ;
 
 CREATE VIEW existingAccounts AS
@@ -200,17 +184,5 @@ SELECT * FROM existingAccounts;
 SELECT * FROM existingCards;
 SELECT * FROM transferences;
 
-
 SELECT * FROM Cards;
 SHOW TABLES;
-
-/*
-=======
-
-<<<<<<< HEAD
-
->>>>>>> a74808f4e2e9e79eca787d2ae08fa65342f47dd3
-=======
->>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
-*/
-"
