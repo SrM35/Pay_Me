@@ -46,3 +46,5 @@ document.getElementById('signIn-btn').addEventListener('click', function() {
         console.error('Error en el login:', error);
         alert('Error: ' + (error.message || 'Ocurrió un error desconocido'));
     });});
+
+    

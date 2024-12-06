@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'payments-icon': 'payments.html',
         'index-icon': 'index.html',
         'add-card-btn': 'dashboard.html',
-        'make-transfer-btn': 'dashboard.html',
+        // 'make-transfer-btn': 'dashboard.html',
         'make-payment-btn': 'dashboard.html',
         'make-transfer-btn1': 'transfer.html',
         'make-payment-btn1': 'payments.html',

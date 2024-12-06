@@ -147,82 +147,62 @@ app.get('/Cards', async (req, res) => {
     }
 });
 
-//  app.post('/addCard', async (req, res) =>{
-//      let db;
-//      try {
-//          const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
-        
-//         db = await connect();
-//         const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
-//          const [rows] = await db.execute(query);
-//          console.log(rows);
-
-//         res.json({
-//              data: rows,
-//             status: 200
-//          });
-//      } catch(err) {
-//          console.error(err);
-//      } finally {
-//          if(db)
-//              db.end();
-//      }
-// });
 
 app.post('/addCard', async (req, res) => {
     let db;
     try {
-        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
-
+        const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
+       
+        
+        if (securityNumbers.length !== 3) {
+            return res.status(400).json({
+                message: 'CVV must be exactly 3 digits',
+                status: 400
+            });
+        }
+       
         db = await connect();
-
-        const query = `CALL SP_ADD_CARD(?, ?, ?, ?, ?, ?)`;
-        const [rows] = await db.execute(query, 
-            [balance,
-                 numberCard, 
-                 nameCardOwner, 
-                 expirationDate, 
-                 securityNumbers, 
-                 idAccount]);
+        const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
+        const [rows] = await db.execute(query);
+        console.log(rows);
         
         res.json({
             data: rows,
             status: 200
         });
-    } catch (err) {
-        console.error('Error al añadir tarjeta:', err);
-        res.status(500).json({ message: 'Error al añadir la tarjeta.' });
-    } finally {
-        if (db) await db.end();
-    }
-});
-
-app.post('/transfere', async (req, res) => {
-    let db;
-    try {
-        const { emailUser_origin, emailUser_destiny, amountTransfer } = req.body;
-
-        db = await connect();
-        const query = `CALL SP_TRANSFERE('${emailUser_origin}', '${emailUser_destiny}', ${amountTransfer})`;
-        const [rows] = await db.execute(query);
-        console.log(rows);
-
-        res.json({
-            data: rows,
-            status: 200
-        });
-    } catch (err) {
+    } catch(err) {
         console.error(err);
+        res.status(500).json({
+            message: err.message,
+            status: 500
+        });
     } finally {
-        if (db)
+        if(db)
             db.end();
     }
 });
 
+ app.post('/transfere', async (req, res) => {
+    let db;
+     try {
+         const {  emailUser_destiny, amountTransfer, messageTransfer } = req.body;
 
+         db = await connect();
+         const query = `CALL SP_TRANSFERE( '${emailUser_destiny}', '${amountTransfer})'`;
+         const [rows] = await db.execute(query);
+         console.log(rows);
 
-
-
+         res.json({
+             data: rows,
+             status: 200
+         });
+     } catch (err) {
+         console.error(err);
+     } finally {
+         if (db)
+             db.end();
+     }
+ });
 
 
 

@@ -95,8 +95,8 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_idAccount CHAR(6)
 )
 BEGIN
-    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) 
-    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumber) 
+    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
 END$$
 DELIMITER ;
 
@@ -113,56 +113,62 @@ END$$
 DELIMITER ;
 
 
-DROP PROCEDURE IF EXISTS SP_TRANSFERE;
 DELIMITER //
-CREATE PROCEDURE SP_TRANSFERE(IN emailUser_origin VARCHAR(50), IN emailUser_destiny VARCHAR(50), IN _amount FLOAT,IN _message VARCHAR(255))
-BEGIN 
-	DECLARE amount_origin FLOAT;
+CREATE PROCEDURE SP_TRANSFERE(
+    IN emailUser_origin VARCHAR(50),
+    IN emailUser_destiny VARCHAR(50),
+    IN _amount FLOAT,
+    IN _message VARCHAR(255)
+)
+BEGIN
+    DECLARE amount_origin FLOAT;
     DECLARE amount_destiny FLOAT;
 
-	START TRANSACTION;
+    START TRANSACTION;
     IF _amount <= 0 THEN
-		ROLLBACK;
+        ROLLBACK;
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'The amount to transfer must be greater than 0';
-	END IF;
-    
-    IF(SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_origin) = 0 THEN 
-		ROLLBACK;
-		SIGNAL SQLSTATE '45000'
+    END IF;
+
+    IF (SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_origin) = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Origin account does not exist';
-	END IF;
-    
-    IF(SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_destiny) = 0 THEN
-		ROLLBACK;
-		SIGNAL SQLSTATE '45000'
+    END IF;
+
+    IF (SELECT COUNT(emailUser) FROM Account WHERE emailUser = emailUser_destiny) = 0 THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Destiny account does not exist';
-	END IF;
-    
+    END IF;
+
     IF emailUser_origin = emailUser_destiny THEN
-		ROLLBACK;
-		SIGNAL SQLSTATE '45000'
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Origin account is equal to destiny account';
     END IF;
-    
+
     SELECT balance INTO amount_origin FROM Account WHERE emailUser = emailUser_origin;
     IF amount_origin < _amount THEN
-		ROLLBACK;
-		SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'insufficient balance';
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Insufficient balance';
     END IF;
-    
+
     SELECT balance INTO amount_destiny FROM Account WHERE emailUser = emailUser_destiny;
-    
+
     SET amount_origin = amount_origin - _amount;
     SET amount_destiny = amount_destiny + _amount;
-    
+
     UPDATE Account SET balance = amount_origin WHERE emailUser = emailUser_origin;
     UPDATE Account SET balance = amount_destiny WHERE emailUser = emailUser_destiny;
-    INSERT INTO Transfers(emailUser, dateTransfer, timeTransfer, amountTransfer) VALUES (emailUser_origin,  CURDATE(), CURTIME(), _amount,_message);
-    
+
+    INSERT INTO Transfers (emailUser, dateTransfer, timeTransfer, amountTransfer, messageTransfer)
+    VALUES (emailUser_origin, CURDATE(), CURTIME(), _amount, _message);
+
     COMMIT;
-END// 
+END//
 DELIMITER ;
 
 CREATE VIEW existingAccounts AS

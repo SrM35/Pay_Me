@@ -14,3 +14,10 @@ document.addEventListener('DOMContentLoaded', function () {
         usernameElement.textContent = `Hi there, ${username}!`;
     }
 });
+const usernameElement = document.querySelector('.cta1');
+if (usernameElement) {
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+        usernameElement.textContent = savedUsername;
+    }
+}
