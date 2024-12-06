@@ -204,12 +204,16 @@ app.post('/addCard', async (req, res) => {
     try {
         const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
 
+<<<<<<< HEAD
+=======
+        /*
+>>>>>>> ec1155dfa5f5aee8621da660c86dc2953fb1ff66
         if (!idAccount) {
             return res.status(400).json({
                 message: 'Account ID is missing',
                 status: 400
             });
-        }
+        }*/
 
         if (!securityNumbers || securityNumbers.length !== 3) {
             return res.status(400).json({

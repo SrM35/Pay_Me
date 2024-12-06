@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+-- Active: 1732115424953@@localhost@3306@payme
+>>>>>>> ec1155dfa5f5aee8621da660c86dc2953fb1ff66
 DROP DATABASE IF EXISTS PayMe;
 CREATE DATABASE PayMe;
 USE PayMe;
@@ -11,6 +15,10 @@ CREATE TABLE Account(
     passwordUser VARCHAR(100) NOT NULL
 );
 
+<<<<<<< HEAD
+=======
+-- HOLI
+>>>>>>> ec1155dfa5f5aee8621da660c86dc2953fb1ff66
 DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -21,6 +29,13 @@ CREATE TABLE Cards(
     securityNumbers CHAR(3) NOT NULL UNIQUE,
     idAccount CHAR(6) NOT NULL,
     FOREIGN KEY (idAccount) REFERENCES Account(idAccount) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS debt;
+CREATE TABLE debt(
+    idDebt INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nameCompany VARCHAR(100) NOT NULL,
+    amountToPay DECIMAL(10,2) NOT NULL
 );
 
 DROP TABLE IF EXISTS Payments;
@@ -90,8 +105,13 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_idAccount CHAR(6)
 )
 BEGIN
+<<<<<<< HEAD
     INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers)
     VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
+=======
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount) 
+    VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers, p_idAccount);
+>>>>>>> ec1155dfa5f5aee8621da660c86dc2953fb1ff66
 END$$
 DELIMITER ;
 
@@ -169,11 +189,13 @@ SELECT * FROM Cards;
 CREATE VIEW transferences AS
 SELECT * FROM Transfers;
 
+/*
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
+<<<<<<< HEAD
 
 CALL SP_CREATE_ACCOUNT('maria', 1000, 'mariaw@gmail.com', 'password123');
 CALL SP_CREATE_ACCOUNT('juanito', 2000, 'juanito5@gmail.com', 'password456');
@@ -186,3 +208,16 @@ SELECT * FROM transferences;
 
 SELECT * FROM Cards;
 SHOW TABLES;
+=======
+*/
+
+/*
+=======
+
+<<<<<<< HEAD
+
+>>>>>>> a74808f4e2e9e79eca787d2ae08fa65342f47dd3
+=======
+>>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
+*/
+>>>>>>> ec1155dfa5f5aee8621da660c86dc2953fb1ff66
