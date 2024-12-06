@@ -1,4 +1,4 @@
-"-- Active: 1732115424953@@localhost@3306@payme
+-- Active: 1732115424953@@localhost@3306@payme
 DROP DATABASE IF EXISTS PayMe;
 CREATE DATABASE PayMe;
 USE PayMe;
@@ -12,7 +12,7 @@ CREATE TABLE Account(
     passwordUser VARCHAR(100) NOT NULL
 );
 
-//HOLI
+-- HOLI
 DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -96,11 +96,10 @@ CREATE PROCEDURE SP_ADD_CARD(
     IN p_numberCard VARCHAR(16), 
     IN p_nameCardOwner VARCHAR(100),
     IN p_expirationDate DATE,
-    IN p_securityNumbers CHAR(3),
-    IN p_idAccount CHAR(6)
+    IN p_securityNumbers CHAR(3)
 )
 BEGIN
-    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumber) 
+    INSERT INTO Cards(balance, numberCard, nameCardOwner, expirationDate, securityNumbers) 
     VALUES (p_balance, p_numberCard, p_nameCardOwner, p_expirationDate, p_securityNumbers);
 END$$
 DELIMITER ;
@@ -185,24 +184,13 @@ SELECT * FROM Cards;
 CREATE VIEW transferences AS
 SELECT * FROM Transfers;
 
+/*
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
-
-CALL SP_CREATE_ACCOUNT('maria', 1000, 'mariaw@gmail.com', 'password123');
-CALL SP_CREATE_ACCOUNT('juanito', 2000, 'juanito5@gmail.com', 'password456');
-
-CALL SP_TRANSFERE('mariaw@gmail.com', 'juanito5@gmail.com', 500, 'Payment for services');
-
-SELECT * FROM existingAccounts;
-SELECT * FROM existingCards;
-SELECT * FROM transferences;
-
-
-SELECT * FROM Cards;
-SHOW TABLES;
+*/
 
 /*
 =======
@@ -213,4 +201,3 @@ SHOW TABLES;
 =======
 >>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
 */
-"

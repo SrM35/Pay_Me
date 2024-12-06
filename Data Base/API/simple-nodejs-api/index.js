@@ -197,15 +197,15 @@ app.post('/addCard', async (req, res) => {
     let db;
     try {
         
-        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
+        const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers } = req.body;
 
-        
+        /*
         if (!idAccount) {
             return res.status(400).json({
                 message: 'Account ID is missing',
                 status: 400
             });
-        }
+        }*/
 
        
         if (!securityNumbers || securityNumbers.length !== 3) {
@@ -220,8 +220,8 @@ app.post('/addCard', async (req, res) => {
 
        
         const [result] = await db.execute(
-            'CALL SP_ADD_CARD(?, ?, ?, ?, ?, ?)',
-            [balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount]
+            'CALL SP_ADD_CARD(?, ?, ?, ?, ?)',
+            [balance, numberCard, nameCardOwner, expirationDate, securityNumbers]
         );
 
        
