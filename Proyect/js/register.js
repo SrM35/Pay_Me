@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Email:', localStorage.getItem('email'));
             console.log('ID Account:', localStorage.getItem('idAccount'));
             
-            window.location.href = 'dashboard.html';
+            window.location.href = 'login.html';
         })
         .catch(error => {
             alert('Error: ' + error.message);
