@@ -51,9 +51,7 @@ CREATE TABLE Transfers (
     dateTransfer DATE NOT NULL,
     timeTransfer TIME NOT NULL,
     amountTransfer DECIMAL(10,2) NOT NULL,
-    messageTransfer VARCHAR(100) NOT NULL,
-    typeTransfer ENUM('ingreso', 'gasto') NOT NULL,  
-    descriptionTransfer TEXT,                      
+    messageTransfer TEXT NOT NULL,
     FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
 
@@ -137,6 +135,7 @@ BEGIN
     DECLARE amount_destiny FLOAT;
 
     START TRANSACTION;
+
     IF _amount <= 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
@@ -177,10 +176,25 @@ BEGIN
     UPDATE Account SET balance = amount_destiny WHERE emailUser = emailUser_destiny;
 
     INSERT INTO Transfers (emailUser, dateTransfer, timeTransfer, amountTransfer, messageTransfer)
-    VALUES (emailUser_origin, CURDATE(), CURTIME(), _amount, _message);
+    VALUES (emailUser_origin, CURDATE(), CURTIME(), -_amount, _message);
+
+    INSERT INTO Transfers (emailUser, dateTransfer, timeTransfer, amountTransfer, messageTransfer)
+    VALUES (emailUser_destiny, CURDATE(), CURTIME(), _amount, _message);
 
     COMMIT;
 END//
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS SP_ADD_DEBT;
+DELIMITER $$
+CREATE PROCEDURE SP_ADD_DEBT(
+	p_nameCompany VARCHAR(100),
+    p_amountToPay DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO debt(nameCompany, amountToPay) VALUES (p_nameCompany, p_amountToPay);
+END$$
 DELIMITER ;
 
 CREATE VIEW existingAccounts AS
@@ -199,6 +213,8 @@ GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
 */
+
+CALL SP_ADD_DEBT('NETFLIX', 100);
 
 /*
 =======
