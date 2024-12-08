@@ -30,7 +30,7 @@
 
 ###
 
-<p align="left">Online payment system, similar to some other pay apps, like PayPal or Apple Pay.<br>This app brings you a lot of opportunities, for example:</p>
+<p align="left">Online payment system, similar to some other pay apps, like PayPal or Apple Pay, but now, we're going to compete against this big fishes,.<br>This app brings you a lot of opportunities, for example:</p>
 
 ###
 
@@ -38,7 +38,11 @@
 
 ###
 
-<h6 align="left">> Don´t worry about taxes for account use, we got you!.</h6>
+<h6 align="left">> Pay your favorite services from here automatically, for example Spotify, Netflix, and more!!.</h6>
+
+###
+
+<h6 align="left">> Like a shield, we have protection for you account and for your information, don't worry, everything is fine.</h6>
 
 ###
 
