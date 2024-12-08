@@ -30,7 +30,7 @@
 
 ###
 
-<p align="left">Online payment system, similar to some other pay apps, like PayPal or Apple Pay, but now, we're going to compete against this big fishes,.<br>This app brings you a lot of opportunities, for example:</p>
+<p align="left">Online payment system, similar to some other pay apps, like PayPal or Apple Pay, but now, we're going to compete against this big fishes.<br>Secure and simple through mobile devices or computers, you have your money in the clouds, technically.<br>This app brings you a lot of opportunities, for example:</p>
 
 ###
 
