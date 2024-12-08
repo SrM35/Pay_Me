@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Cuenta creada exitosamente!');
             localStorage.setItem('username', nameUser);
             localStorage.setItem('balance', balance.toFixed(2));
+            // localStorage.setItem('idAccount', result.data.idAccount);
 
             console.log('Datos guardados en localStorage:');
             console.log('Username:', localStorage.getItem('username'));

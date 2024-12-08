@@ -1,15 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const transferButton = document.getElementById('make-transfer-btn');
-    // Forzar commit
+  
     transferButton.addEventListener('click', async () => {
-      
         const emailUser_origin = localStorage.getItem('email');
-
         const recipientEmail = document.getElementById('recipient-email').value;
         const transferAmount = document.getElementById('transfer-amount').value;
         const transferMessage = document.getElementById('transfer-message').value;
 
-       
         if (!emailUser_origin) {
             alert('User not logged in. Please log in again.');
             return;
@@ -36,13 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const result = await response.json();
 
-            if (result.status === 200) {
+           
+            if (result.success === true) {
                 alert('Transfer successful!');
-                
                
                 document.getElementById('recipient-email').value = '';
                 document.getElementById('transfer-amount').value = '';
                 document.getElementById('transfer-message').value = '';
+
+              
                 const balanceElement = document.querySelector('.total-balance div:nth-child(2)');
                 const savedBalance = localStorage.getItem('balance');
                 if (savedBalance && balanceElement) {
@@ -60,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    
     const balanceElement = document.querySelector('.total-balance div:nth-child(2)');
     if (balanceElement) {
         const savedBalance = localStorage.getItem('balance');

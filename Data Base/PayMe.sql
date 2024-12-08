@@ -51,7 +51,9 @@ CREATE TABLE Transfers (
     dateTransfer DATE NOT NULL,
     timeTransfer TIME NOT NULL,
     amountTransfer DECIMAL(10,2) NOT NULL,
-    messageTransfer TEXT NOT NULL,
+    messageTransfer VARCHAR(100) NOT NULL,
+    typeTransfer ENUM('ingreso', 'gasto') NOT NULL,  
+    descriptionTransfer TEXT,                      
     FOREIGN KEY (emailUser) REFERENCES Account(emailUser)
 );
 
@@ -91,6 +93,8 @@ BEGIN
 
     INSERT INTO Account(nameUser, balance, emailUser, passwordUser) 
     VALUES (p_nameUser, p_balance, p_emailUser, p_passwordUser);
+    
+    
 END //
 DELIMITER ;
 
@@ -135,7 +139,6 @@ BEGIN
     DECLARE amount_destiny FLOAT;
 
     START TRANSACTION;
-
     IF _amount <= 0 THEN
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
@@ -176,25 +179,10 @@ BEGIN
     UPDATE Account SET balance = amount_destiny WHERE emailUser = emailUser_destiny;
 
     INSERT INTO Transfers (emailUser, dateTransfer, timeTransfer, amountTransfer, messageTransfer)
-    VALUES (emailUser_origin, CURDATE(), CURTIME(), -_amount, _message);
-
-    INSERT INTO Transfers (emailUser, dateTransfer, timeTransfer, amountTransfer, messageTransfer)
-    VALUES (emailUser_destiny, CURDATE(), CURTIME(), _amount, _message);
+    VALUES (emailUser_origin, CURDATE(), CURTIME(), _amount, _message);
 
     COMMIT;
 END//
-DELIMITER ;
-
-
-DROP PROCEDURE IF EXISTS SP_ADD_DEBT;
-DELIMITER $$
-CREATE PROCEDURE SP_ADD_DEBT(
-	p_nameCompany VARCHAR(100),
-    p_amountToPay DECIMAL(10,2)
-)
-BEGIN
-    INSERT INTO debt(nameCompany, amountToPay) VALUES (p_nameCompany, p_amountToPay);
-END$$
 DELIMITER ;
 
 CREATE VIEW existingAccounts AS
@@ -205,6 +193,17 @@ SELECT * FROM Cards;
 
 CREATE VIEW transferences AS
 SELECT * FROM Transfers;
+CALL SP_CREATE_ACCOUNT('isaac',1200,'saacexe@gmail.com','dannita');
+CALL SP_CREATE_ACCOUNT('isaac',1200,'alexan23@gmail.com','ale12345');
+SELECT * FROM Transfers WHERE emailUser = 'red@gmail.com';
+SELECT * FROM Transfers WHERE emailUser = 'saacexe@gmail.com';
+
+
+CALL SP_TRANSFERE('saacexe@gmail.com', 'alexan23@gmail.com', 50, 'Transferencia de prueba');
+CALL SP_TRANSFERE('saacexe@gmail.com', 'alexan23@gmail.com', 10, 'camioncito');
+CALL SP_TRANSFERE('red@gmail.com', 'alexan23@gmail.com', 10, 'camioncito');
+
+SELECT * FROM Transfers WHERE emailUser = 'saacexe@gmail.com';
 
 /*
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
@@ -213,8 +212,6 @@ GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
 */
-
-CALL SP_ADD_DEBT('NETFLIX', 100);
 
 /*
 =======

@@ -250,27 +250,74 @@ app.post('/transfere', async (req, res) => {
     try {
         const { emailUser_origin, emailUser_destiny, amountTransfer, messageTransfer } = req.body;
 
+    
         db = await connect();
 
-       
+
         const [result] = await db.execute(
             'CALL SP_TRANSFERE(?, ?, ?, ?)',
             [emailUser_origin, emailUser_destiny, amountTransfer, messageTransfer]
         );
 
-        res.json({
-            message: 'Transfer completed successfully',
-            status: 200,
-        });
+      
+        const transferDate = new Date();
+        const formattedDate = transferDate.toISOString();
+
+        const responseData = {
+            success: true,
+            message: 'Transferencia exitosa :3',
+            data: {
+                emailUser_origin,
+                emailUser_destiny,
+                amountTransfer,
+                messageTransfer,
+                dateTransfer: formattedDate,
+                timeTransfer: transferDate.toLocaleTimeString(),
+            }
+        };
+
+        res.json(responseData);
+
     } catch (err) {
         console.error(err);
 
+       
         if (db) {
             await db.rollback();
         }
 
         res.status(500).json({
             error: 'An error occurred during the transfer',
+        });
+    } finally {
+     
+        if (db) {
+            db.end();
+        }
+    }
+});
+
+app.get('/transfer/history/:emailUser', async (req, res) => {
+    let db;
+    try {
+        const { emailUser } = req.params; 
+
+        db = await connect();
+
+        const [rows] = await db.execute(
+            'SELECT * FROM Transfers WHERE emailUser = ? ORDER BY dateTransfer DESC, timeTransfer DESC',
+            [emailUser]
+        );
+
+        res.json({
+            success: true,
+            message: 'Historial de transferencias obtenido correctamente',
+            data: rows,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: 'Error al recuperar el historial de transferencias',
         });
     } finally {
         if (db) {

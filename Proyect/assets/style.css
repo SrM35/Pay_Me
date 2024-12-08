@@ -72,6 +72,10 @@ header {
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
+.cta1:hover {
+  background-color: #0056b3;
+  color: #fff;
+}
 
 .main {
   padding: 10px 10rem;
@@ -83,7 +87,7 @@ header {
 }
 
 .title {
-  font-size: 50px;
+  font-size: 80px;
   color: #000000;
   margin-top: 5rem;
 }

@@ -50,42 +50,49 @@
             </nav>
             <div class="container-content">
                 <div class="container"></div>
-                    <div class="search-bar">
+                    <!-- <div class="search-bar">
                         <input type="text" placeholder="Search" class="input">
-                    </div>
+                    </div> -->
                     <div class="options">
                         <div class="dropdown">
                             <div class="dropdown-toggle">
                                 <select name="periodo" id="periodo">
-                                    <option value="Periodo">Periodo</option>
-                                  <option value="dave">2</option>
-                                  <option value="pumpernickel">3</option>
-                                  <option value="reeses">4</option>
+                                    <option value="Periodo">Tipo</option>
+                                  <option value="dave">Transferencia</option>
+                                  <option value="pumpernickel">Pagos</option>
+                                  
                                 </select>
-                                <select name="periodo" id="periodo">
+                                <button class="btn-filters">
+                                   <img src="images/filter.png" alt="down" class="filter-btn">
+                               </button> 
+                                <!-- <select name="periodo" id="periodo">
                                     <option value="Periodo">Operaciones</option>
                                   <option value="dave">2</option>
                                   <option value="pumpernickel">3</option>
                                   <option value="reeses">4</option>
-                                </select>
-                        <button class="btn-filters">
-                            <img src="images/filter.png" alt="down" class="filter-btn">
-                        </button>
+                                </select> -->
+                    </div>
+                    <div id="dateFilter" style="display: none;">
+                        <label for="transferDate">Fecha:</label>
+                        <input type="date" id="transferDate" />
                     </div>
                 </div>
-                <div class="movements-container">
-                    <div class="container3-1">
-                         <!-- <div class="img-card">
+                <div id="transferHistory">
+                    
+                    <!-- <div class="container3-1">
+                         <div class="img-card">
                             <img src="images/tranferRed.png" alt="img" class="img-1">
                         </div>
                         <div class="content-card">
-                            <p class="title-card">Netflix</p>
+                            <p class="message">Netflix</p>
                             <p class="date">Today</p>
                         </div>
                         <div class="amount">
                             <p class="amount1">$100</p> -->
-                        </div>
+                        </div> 
                 </div>
+                
+                <script src="js/movements.js"></script> 
                 <script src="js/functionality.js"></script>
         </body>
 </html>

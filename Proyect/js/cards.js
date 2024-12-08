@@ -70,3 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+const usernameElement = document.querySelector('.cta1');
+    if (usernameElement) {
+        const savedUsername = localStorage.getItem('username');
+        if (savedUsername) {
+            usernameElement.textContent = savedUsername;
+        }
+    }

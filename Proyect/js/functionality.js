@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const routes = {
-        'redirect-btn': 'login.html',
+        'redirect-btn': 'register.html',
        // 'signIn-btn': 'dashboard.html',
         'signUp-btn': 'register.html',
         'create-btn': 'dashboard.html',
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'cards-icon': 'cards.html',
         'payments-icon': 'payments.html',
         'index-icon': 'index.html',
-        'add-card-btn': 'dashboard.html',
+        //'add-card-btn': 'dashboard.html',
         // 'make-transfer-btn': 'dashboard.html',
         'make-payment-btn': 'dashboard.html',
         'make-transfer-btn1': 'transfer.html',

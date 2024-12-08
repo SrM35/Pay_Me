@@ -21,14 +21,13 @@
             </nav>
         </header>
         <div class="main-content">
-          
             <nav class="side-bar">
                 <a href="#" class="sidebar-item">
-                    <img id ="home-icon" src="images/home.png" alt="Go to Home page" class="sidebar-icon">
+                    <img id="home-icon" src="images/home.png" alt="Go to Home page" class="sidebar-icon">
                     <span class="sidebar-text">Home</span>
                 </a>
                 <a href="#" class="sidebar-item">
-                    <img id ="historial-icon" src="images/historial.png" alt="View history" class="sidebar-icon">
+                    <img id="historial-icon" src="images/historial.png" alt="View history" class="sidebar-icon">
                     <span class="sidebar-text">Historial</span>
                 </a>
                 <a href="#" class="sidebar-item">
@@ -48,15 +47,16 @@
                     <span class="sidebar-text">Log out</span>
                 </a>
             </nav>
-            
-           
+
+            <!-- Main Content -->
             <div class="container-content">
+                <!-- User Info and Card Section -->
                 <div class="container">
                     <div class="header">
                         <h1 class="title">Hi there,<username>!</h1>
                         <button id="add-card-btn1" class="btn-add-card">+ Add card</button>
                     </div>
-                    
+
                     <div class="card-container">
                         <div class="card-section">
                             <div class="card-header">
@@ -72,40 +72,36 @@
                                 </div>
                                 <div class="visa-text">Visa</div>
                             </div>
-                            
                         </div>
-                        
+
+                       
                         <div class="container-actions">
                             <button id="make-transfer-btn1" class="action-btn">Transfer</button>
-                            <button id ="make-payment-btn1" class="action-btn">Make payments</button>
+                            <button id="make-payment-btn1" class="action-btn">Make payments</button>
                         </div>
                     </div>
                 </div>
-                
+
+               
                 <div class="container-3">
                     <div class="header2">
-                        <p class="title2">Recent activity</p>
-                        <p class="subtitle2">See all </p>
+                        <p class="title2">Recent Activity</p>
+                        <p class="subtitle2">See all</p>
                         <button class="next">
                             <img id="next-btn" src="images/next1.png" alt="more" class="next-btn">
                         </button>
-                    </div>  
-                    <div class="container3-1">
-                        <div class="img-card">
-                            <img src="images/tranferRed.png" alt="img" class="img-1">
-                        </div>
-                        <div class="content-card">
-                            <p class="title-card">Netflix</p>
-                            <p class="date">Today</p>
-                        </div>
-                        <div class="amount">
-                            <p class="amount1">$100</p>
-                        </div>
+                    </div>
+
+                   
+                    <div id="transferHistory" class="container3-1">
+                        
                     </div>      
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
     <script src="js/dashboard.js"></script>
     <script src="js/functionality.js"></script>
 </body>
