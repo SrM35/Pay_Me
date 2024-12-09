@@ -326,6 +326,32 @@ app.get('/transfer/history/:emailUser', async (req, res) => {
     }
 });
 
+app.post('/payment', async (req, res) => {
+    let db;
+    try {
+        const { paymentMethod, nameCompany, emailUser, numberCard, securityNumbers } = req.body;
+        db = await connect();
+        const [result] = await db.execute(
+            'CALL SP_PAY_DEBT(?, ?, ?, ?, ?)',
+            [paymentMethod, nameCompany, emailUser, numberCard, securityNumbers]
+        );
+        res.json({
+            success: true,
+            message: 'Payment successful',
+            data: result,
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: 'An error occurred during the payment',
+        });
+    } finally {
+        if (db) {
+            db.end();
+        }
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log('► Server connected.');

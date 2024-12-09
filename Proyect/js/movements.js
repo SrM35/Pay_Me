@@ -81,7 +81,7 @@ function displayTransfers(transfers) {
        <p class="date">${new Date(transfer.dateTransfer).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })}</p>
       </div>
       <div class="amount">
-        <p class="amount1">-$${transfer.amountTransfer}</p>
+        <p class="amount1">$${transfer.amountTransfer}</p>
       </div>
     `;
     transferHistoryElement.appendChild(transferElement);

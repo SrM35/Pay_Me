@@ -28,7 +28,7 @@ CREATE TABLE Cards(
 DROP TABLE IF EXISTS debt;
 CREATE TABLE debt(
     idDebt INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nameCompany VARCHAR(100) NOT NULL,
+    nameCompany VARCHAR(100) NOT NULL UNIQUE,
     amountToPay DECIMAL(10,2) NOT NULL
 );
 
@@ -197,9 +197,9 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS SP_PAY_DEBT;
 DELIMITER $$
 CREATE PROCEDURE SP_PAY_DEBT(
-    IN p_idDebt INT,
     IN p_paymentMethod VARCHAR(10),
-    IN p_idAccount CHAR(6),
+    IN p_nameCompany VARCHAR(100),
+    IN p_emailUser VARCHAR(50),
     IN p_numberCard VARCHAR(16),
     IN p_securityNumbers CHAR(3)
 )
@@ -208,10 +208,15 @@ BEGIN
     DECLARE v_balance_account FLOAT;
     DECLARE v_balance_card FLOAT;
     DECLARE v_error_msg VARCHAR(255);
+    DECLARE v_securityNumbers CHAR(3);
+    
+    IF p_securityNumbers = 'NULL' OR 'null' THEN
+        SET p_securityNumbers = NULL;
+    END IF;
 
     SELECT amountToPay INTO v_amount
     FROM debt
-    WHERE idDebt = p_idDebt;
+    WHERE nameCompany = p_nameCompany;
 
     IF v_amount IS NULL THEN
         SIGNAL SQLSTATE '45000'
@@ -221,7 +226,7 @@ BEGIN
     IF p_paymentMethod = 'account' THEN
         SELECT balance INTO v_balance_account
         FROM Account
-        WHERE idAccount = p_idAccount;
+        WHERE emailUser = p_emailUser;
 
         IF v_balance_account IS NULL THEN
             SIGNAL SQLSTATE '45000'
@@ -235,16 +240,25 @@ BEGIN
 
         UPDATE Account
         SET balance = balance - v_amount
-        WHERE idAccount = p_idAccount;
+        WHERE emailUser = p_emailUser;
 
     ELSEIF p_paymentMethod = 'card' THEN
         SELECT balance INTO v_balance_card
         FROM Cards
-        WHERE idCard = p_idCard;
-
+        WHERE numberCard = p_numberCard;
+        
+        SELECT securityNumbers INTO v_securityNumbers
+        FROM Cards
+        WHERE numberCard = p_numberCard;
+        
+        IF p_securityNumbers != v_securityNumbers THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Los numeros de seguridad son erroneos.';
+        END IF;
+        
         IF v_balance_card IS NULL THEN
             SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La tarjeta no existe.';
+			SET MESSAGE_TEXT = 'La tarjeta no existe.';
         END IF;
 
         IF v_balance_card < v_amount THEN
@@ -254,7 +268,7 @@ BEGIN
 
         UPDATE Cards
         SET balance = balance - v_amount
-        WHERE idCard = p_idCard;
+        WHERE numberCard = p_numberCard;
     ELSE
 		SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Método de pago no válido. Use "account" o "card".';
@@ -263,10 +277,10 @@ BEGIN
     INSERT INTO Payments (emailUser, datePayment, timePayment, amountPayment)
     SELECT emailUser, CURRENT_DATE, CURRENT_TIME, v_amount
     FROM Account
-    WHERE idAccount = p_idAccount;
+    WHERE emailUser = p_emailUser;
 
     DELETE FROM debt
-    WHERE idDebt = p_idDebt;
+    WHERE nameCompany = p_nameCompany;
 END$$
 DELIMITER ;
 
@@ -279,25 +293,27 @@ SELECT * FROM Cards;
 CREATE VIEW transferences AS
 SELECT * FROM Transfers;
 
+CREATE VIEW existingPayments AS
+SELECT * FROM Payments;
+
 /*
 CREATE USER 'Paul' @'localhost' IDENTIFIED BY '123';
 GRANT SELECT ON PayMe.existingAccounts TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.existingCards TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
+GRANT SELECT ON PayMe.existingPayments TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
 */
-
 CALL SP_ADD_DEBT('NETFLIX', 100);
+
+
+-- EJEMPLO PARA PAGOS
+/*
 CALL SP_CREATE_ACCOUNT('Juan Antonio', 1000.00, 'jjavier.rojo@gmail.com', 'pppppp');
+CALL SP_ADD_CARD (500.0, '1234123412341324', 'Rodolfo', '2025-08-12', '555', 'YB5241');
+CALL SP_PAY_DEBT('account', 'NETFLIX', 'jjavier.rojo@gmail.com', NULL, NULL);
+CALL SP_PAY_DEBT('card', 'NETFLIX', NULL, '1234123412341324', '555');
 
 SELECT * FROM debt;
-
-/*
-=======
-
-<<<<<<< HEAD
-
->>>>>>> a74808f4e2e9e79eca787d2ae08fa65342f47dd3
-=======
->>>>>>> fd792a0dfe7a21bcc020310f577615601ceda6b2
+SELECT * FROM Payments;
 */
