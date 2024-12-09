@@ -200,6 +200,7 @@ CREATE PROCEDURE SP_PAY_DEBT(
     IN p_paymentMethod VARCHAR(10),
     IN p_nameCompany VARCHAR(100),
     IN p_emailUser VARCHAR(50),
+    IN p_amount DECIMAL(10,2),
     IN p_numberCard VARCHAR(16),
     IN p_securityNumbers CHAR(3)
 )
@@ -210,7 +211,7 @@ BEGIN
     DECLARE v_error_msg VARCHAR(255);
     DECLARE v_securityNumbers CHAR(3);
     
-    IF p_securityNumbers = 'NULL' OR 'null' THEN
+    IF p_securityNumbers = 'NULL' THEN
         SET p_securityNumbers = NULL;
     END IF;
 
@@ -227,6 +228,11 @@ BEGIN
         SELECT balance INTO v_balance_account
         FROM Account
         WHERE emailUser = p_emailUser;
+        
+        IF p_amount > v_balance_account THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'El monto seleccionado sobrepasa el saldo en la cuenta.';
+        END IF;
 
         IF v_balance_account IS NULL THEN
             SIGNAL SQLSTATE '45000'
@@ -237,6 +243,11 @@ BEGIN
             SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Saldo insuficiente de la cuenta.';
         END IF;
+        
+        IF p_amount < v_amount OR p_amount > v_amount THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Seleccione la cantidad correcta a pagar.';
+        END IF;
 
         UPDATE Account
         SET balance = balance - v_amount
@@ -246,6 +257,11 @@ BEGIN
         SELECT balance INTO v_balance_card
         FROM Cards
         WHERE numberCard = p_numberCard;
+        
+        IF p_amount > v_balance_card THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'El monto seleccionado sobrepasa el saldo en la tarjeta.';
+        END IF;
         
         SELECT securityNumbers INTO v_securityNumbers
         FROM Cards
@@ -264,6 +280,11 @@ BEGIN
         IF v_balance_card < v_amount THEN
             SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Saldo insuficiente en la tarjeta.';
+        END IF;
+        
+        IF p_amount < v_amount OR p_amount > v_amount THEN
+			SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Seleccione la cantidad correcta a pagar.';
         END IF;
 
         UPDATE Cards
@@ -311,7 +332,7 @@ CALL SP_ADD_DEBT('NETFLIX', 100);
 /*
 CALL SP_CREATE_ACCOUNT('Juan Antonio', 1000.00, 'jjavier.rojo@gmail.com', 'pppppp');
 CALL SP_ADD_CARD (500.0, '1234123412341324', 'Rodolfo', '2025-08-12', '555', 'YB5241');
-CALL SP_PAY_DEBT('account', 'NETFLIX', 'jjavier.rojo@gmail.com', NULL, NULL);
+CALL SP_PAY_DEBT('account', 'NETFLIX', 'jjavier.rojo@gmail.com', 100.0, NULL, NULL);
 CALL SP_PAY_DEBT('card', 'NETFLIX', NULL, '1234123412341324', '555');
 
 SELECT * FROM debt;

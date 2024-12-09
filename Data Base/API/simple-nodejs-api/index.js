@@ -329,11 +329,11 @@ app.get('/transfer/history/:emailUser', async (req, res) => {
 app.post('/payment', async (req, res) => {
     let db;
     try {
-        const { paymentMethod, nameCompany, emailUser, numberCard, securityNumbers } = req.body;
+        const { paymentMethod, nameCompany, emailUser, amount, numberCard, securityNumbers } = req.body;
         db = await connect();
         const [result] = await db.execute(
-            'CALL SP_PAY_DEBT(?, ?, ?, ?, ?)',
-            [paymentMethod, nameCompany, emailUser, numberCard, securityNumbers]
+            'CALL SP_PAY_DEBT(?, ?, ?, ?, ?, ?)',
+            [paymentMethod, nameCompany, emailUser, amount,numberCard, securityNumbers]
         );
         res.json({
             success: true,
