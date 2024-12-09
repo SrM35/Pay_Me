@@ -1,39 +1,37 @@
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOM cargado correctamente');
+    console.log('DOM loaded successfully');
 
     const button = document.getElementById('add-card-btn');
     if (!button) {
-        console.error('El botón "add-card-btn" no se encontró.');
+        console.error('The "add-card-btn" button was not found.');
         return;
     }
 
     button.addEventListener('click', function () {
-        console.log('Se hizo clic en el botón');
+        console.log('Button clicked');
 
         const idAccount = localStorage.getItem('idAccount');
-
         const balance = document.getElementById('balance').value;
         const numberCard = document.getElementById('card-number').value.trim();
         const nameCardOwner = document.getElementById('name').value.trim();
         const expirationDate = document.getElementById('expiration-date').value;
         const securityNumbers = document.getElementById('cvv').value.trim();
 
-       
         if (!balance || !numberCard || !nameCardOwner || !expirationDate || !securityNumbers) {
             Swal.fire({
                 icon: 'warning',
-                title: 'Campos incompletos',
-                text: 'Por favor, completa todos los campos.',
+                title: 'Incomplete fields',
+                text: 'Please fill out all fields.',
             });
             return;
         }
 
         if (!idAccount) {
-            console.error('Account ID no encontrado en localStorage.');
+            console.error('Account ID not found in localStorage.');
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se encontró el Account ID.',
+                text: 'Account ID not found.',
             });
             return;
         }
@@ -41,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!/^\d{16}$/.test(numberCard)) {
             Swal.fire({
                 icon: 'error',
-                title: 'Número de tarjeta inválido',
-                text: 'El número de tarjeta debe contener exactamente 16 dígitos y no puede tener letras.',
+                title: 'Invalid card number',
+                text: 'The card number must contain exactly 16 digits and cannot have letters.',
             });
             return;
         }
@@ -50,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!/^\d{3}$/.test(securityNumbers)) {
             Swal.fire({
                 icon: 'error',
-                title: 'CVV inválido',
-                text: 'El CVV debe contener exactamente 3 dígitos.',
+                title: 'Invalid CVV',
+                text: 'The CVV must contain exactly 3 digits.',
             });
             return;
         }
@@ -59,13 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!/^[a-zA-Z\s]+$/.test(nameCardOwner)) {
             Swal.fire({
                 icon: 'error',
-                title: 'Nombre inválido',
-                text: 'El nombre solo debe contener letras.',
+                title: 'Invalid name',
+                text: 'The name should only contain letters.',
             });
             return;
         }
 
-        console.log('Enviando datos al backend:', {
+        console.log('Sending data to the backend:', {
             balance,
             numberCard,
             nameCardOwner,
@@ -90,30 +88,30 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                console.log('Respuesta del servidor:', data);
+                console.log('Server response:', data);
 
                 if (data.status === 200) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Tarjeta agregada',
-                        text: '¡Tu tarjeta fue agregada exitosamente!',
+                        title: 'Card added',
+                        text: 'Your card was successfully added!',
                     }).then(() => {
                         window.location.href = 'dashboard.html';
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error al agregar tarjeta',
-                        text: data.message || 'Ocurrió un error.',
+                        title: 'Failed to add card',
+                        text: data.message || 'An error occurred.',
                     });
                 }
             })
             .catch(err => {
-                console.error('Error en la solicitud:', err);
+                console.error('Request error:', err);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: 'Error al procesar la solicitud.',
+                    text: 'Error processing the request.',
                 });
             });
     });

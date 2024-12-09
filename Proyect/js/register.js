@@ -5,61 +5,54 @@ document.addEventListener('DOMContentLoaded', function() {
         const emailUser = document.getElementById('email').value;
         const passwordUser = document.getElementById('password').value;
 
-     
         if (!nameUser || !balance || !emailUser || !passwordUser) {
             await Swal.fire({
                 icon: "warning",
-                title: "Campos incompletos",
-                text: "Por favor, completa todos los campos para continuar.",
+                title: "Incomplete fields",
+                text: "Please fill in all the fields to continue.",
             });
             return;
         }
 
-     
         const namePattern = /^[a-zA-Z\s]+$/;
         if (!namePattern.test(nameUser)) {
             await Swal.fire({
                 icon: "error",
-                title: "Nombre inválido",
-                text: "El nombre no debe contener números.",
+                title: "Invalid name",
+                text: "The name should not contain numbers.",
             });
             return;
         }
 
-       
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
         if (!emailPattern.test(emailUser)) {
             await Swal.fire({
                 icon: "error",
-                title: "Correo inválido",
-                text: "Por favor, ingresa un correo electrónico válido.",
+                title: "Invalid email",
+                text: "Please enter a valid email address.",
             });
             return;
         }
 
-       
         const balanceValue = parseFloat(balance);
         if (isNaN(balanceValue) || balanceValue < 8) {
             await Swal.fire({
                 icon: "error",
-                title: "Balance inválido",
-                text: "El balance debe ser un número mayor o igual a 8.",
+                title: "Invalid balance",
+                text: "The balance must be a number equal to or greater than 8.",
             });
             return;
         }
 
-      
         if (passwordUser.length < 8) {
             await Swal.fire({
                 icon: "error",
-                title: "Contraseña inválida",
-                text: "La contraseña debe tener al menos 8 caracteres.",
+                title: "Invalid password",
+                text: "The password must be at least 8 characters long.",
             });
             return;
         }
 
-     
         try {
             const response = await fetch('http://localhost:3000/createAccount', {
                 method: 'POST',
@@ -77,41 +70,36 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (response.ok) {
-            
                 await Swal.fire({
-                    title: "¡Cuenta creada exitosamente!",
-                    text: "Ahora puedes iniciar sesión.",
+                    title: "Account created successfully!",
+                    text: "You can now log in.",
                     icon: "success",
                 });
 
-         
                 localStorage.setItem('username', nameUser);
                 localStorage.setItem('balance', balanceValue.toFixed(2));
                 localStorage.setItem('email', emailUser);
 
-                console.log('Datos guardados en localStorage:');
+                console.log('Data saved in localStorage:');
                 console.log('Username:', localStorage.getItem('username'));
                 console.log('Balance:', localStorage.getItem('balance'));
                 console.log('Email:', localStorage.getItem('email'));
 
-               
                 window.location.href = 'login.html';
             } else {
-        
                 await Swal.fire({
                     icon: "error",
-                    title: "Error al crear la cuenta",
-                    text: result.message || "Ocurrió un problema. Intenta de nuevo.",
+                    title: "Error creating account",
+                    text: result.message || "An issue occurred. Please try again.",
                 });
             }
         } catch (error) {
-            console.error('Error al crear la cuenta:', error);
+            console.error('Error creating account:', error);
 
-      
             await Swal.fire({
                 icon: "error",
-                title: "Error en el servidor",
-                text: error.message || "Ocurrió un error desconocido.",
+                title: "Server error",
+                text: error.message || "An unknown error occurred.",
             });
         }
     });
@@ -119,8 +107,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('signIn-btn').addEventListener('click', function() {
         Swal.fire({
             icon: "info",
-            title: "Iniciar sesión",
-            text: "Esta funcionalidad no está implementada aún.",
+            title: "Sign in",
+            text: "This functionality is not implemented yet.",
         });
     });
 });

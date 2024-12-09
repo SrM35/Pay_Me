@@ -10,17 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!emailUser_origin) {
             Swal.fire({
                 icon: "error",
-                title: "Usuario no autenticado",
-                text: "Por favor, inicia sesión de nuevo.",
+                title: "User not authenticated",
+                text: "Please log in again.",
             });
             return;
         }
 
-        if (!recipientEmail || !transferAmount|| !transferMessage) {
+        if (!recipientEmail || !transferAmount || !transferMessage) {
             Swal.fire({
                 icon: "warning",
-                title: "Campos incompletos",
-                text: "Por favor, llena todos los campos requeridos.",
+                title: "Incomplete fields",
+                text: "Please fill in all required fields.",
             });
             return;
         }
@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (parseFloat(transferAmount) > savedBalance) {
             Swal.fire({
                 icon: "error",
-                title: "Fondos insuficientes",
-                text: "No tienes suficiente saldo para realizar esta transferencia.",
+                title: "Insufficient funds",
+                text: "You do not have enough balance to complete this transfer.",
             });
             return;
         }
@@ -52,15 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.success === true) {
                 Swal.fire({
                     icon: "success",
-                    title: "Transferencia exitosa",
-                    text: "¡El dinero ha sido enviado correctamente!",
+                    title: "Transfer successful",
+                    text: "The money has been sent successfully!",
                 }).then(() => {
                     
                     document.getElementById('recipient-email').value = '';
                     document.getElementById('transfer-amount').value = '';
                     document.getElementById('transfer-message').value = '';
 
-                    
                     const balanceElement = document.querySelector('.total-balance div:nth-child(2)');
                     const newBalance = savedBalance - parseFloat(transferAmount);
                     localStorage.setItem('balance', newBalance.toFixed(2));
@@ -73,8 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 Swal.fire({
                     icon: "error",
-                    title: "Transferencia fallida",
-                    text: result.message || "Ocurrió un error desconocido.",
+                    title: "Transfer failed",
+                    text: result.message || "An unknown error occurred.",
                 }).then(() => {
                     return;
                 });
@@ -84,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             Swal.fire({
                 icon: "error",
-                title: "Error en la transferencia",
-                text: "Hubo un problema al procesar tu solicitud. Intenta nuevamente.",
+                title: "Transfer error",
+                text: "There was a problem processing your request. Please try again.",
             });
         });
     });

@@ -1,39 +1,52 @@
+function showAlert() {
+    Swal.fire({
+        title: "Google no disponible.",
+        width: 600,
+        padding: "3em",
+        color: "#716add",
+        background: "#fff url('/images/si.jpg') no-repeat center center",
+        backdrop: `
+            rgba(0,0,123,0.4)
+            url("/images/kirby.gif")  
+            left top
+            no-repeat
+        `
+    });
+}
+
 document.getElementById('signIn-btn').addEventListener('click', async function() {
     const emailUser = document.getElementById('email').value;
     const passwordUser = document.getElementById('password').value;
 
-   
     if (!emailUser || !passwordUser) {
         await Swal.fire({
             icon: "warning",
-            title: "Campos incompletos",
-            text: "Por favor, ingresa tu email y contraseña.",
+            title: "Incomplete fields",
+            text: "Please enter your email and password.",
         });
         return;
     }
 
-    
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(emailUser)) {
         await Swal.fire({
             icon: "error",
-            title: "Correo inválido",
-            text: "Por favor, ingresa un correo electrónico válido.",
+            title: "Invalid email",
+            text: "Please enter a valid email address.",
         });
         return;
     }
 
-    
     if (passwordUser.length < 8) {
         await Swal.fire({
             icon: "error",
-            title: "Contraseña inválida",
-            text: "La contraseña debe tener al menos 8 caracteres.",
+            title: "Invalid password",
+            text: "The password must be at least 8 characters long.",
         });
         return;
     }
 
-    console.log('Enviando solicitud de login:', { emailUser, passwordUser });
+    console.log('Sending login request:', { emailUser, passwordUser });
 
     try {
         const response = await fetch('http://localhost:3000/login', {
@@ -48,7 +61,7 @@ document.getElementById('signIn-btn').addEventListener('click', async function()
         });
 
         const result = await response.json();
-        console.log('Resultado del login:', result);
+        console.log('Login result:', result);
 
         if (result.success) {
             localStorage.setItem('username', result.user.name);
@@ -57,8 +70,9 @@ document.getElementById('signIn-btn').addEventListener('click', async function()
             localStorage.setItem('idAccount', result.user.idAccount);
 
             await Swal.fire({
-                title: "Inicio de sesión exitoso!",
-                text: "Bienvenido a PAY-ME!",
+                title: "Login successful!",
+                text: "Welcome to PAY-ME!",
+                color: "#716add",
                 icon: "success"
             });
 
@@ -66,17 +80,18 @@ document.getElementById('signIn-btn').addEventListener('click', async function()
         } else {
             await Swal.fire({
                 icon: "error",
-                title: "Error al iniciar sesión",
-                text: result.message || "Intenta de nuevo!",
+                title: "Login failed",
+                text: result.message || "Please try again!",
             });
         }
     } catch (error) {
-        console.error('Error en el login:', error);
+        console.error('Login error:', error);
 
         await Swal.fire({
             icon: "error",
-            title: "Error en el servidor",
-            text: error.message || "Ocurrió un error desconocido.",
+            title: "Server error",
+            text: error.message || "An unknown error occurred.",
         });
     }
+ 
 });
