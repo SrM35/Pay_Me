@@ -57,16 +57,29 @@
                                 </div>
                             </div>
                         </div>
-                     <div class="container-actions">
-                        <p class="email">Payment method</p>
-                        <select id="payment-method" class="option">
-                            <option value="" disabled selected>Available balance</option>
-                            <option value="method1">Tarjeta</option>
-                            <option value="method2">Saldo disponible</option>
-                        </select>
-                        <p class="amount">Amount to pay</p>
-                        <input type="number" id="amount-input" placeholder="0.00" class="amount-input" step="0.01" min="0" required>
-                        <button id="make-payment-btn" class="action-btn">Make payment</button>
+                        <div class="container-actions">
+                            <label for="payment-method">Payment Method</label>
+                            <select id="payment-method" required>
+                                <option value="account">Account</option>
+                                <option value="card">Card</option>
+                            </select>
+                        
+                            <p id="companyName" class="company">Deuda con:</p> <
+                            <p class="amount">Amount to Pay:</p>
+                            <input type="text" id="amountPay" readonly>
+                        
+                            <div id="card-info" style="display:none;">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="Enter card number">
+                        
+                                <label for="security-numbers">Security Numbers</label>
+                                <input type="text" id="security-numbers" placeholder="Enter security numbers">
+                            </div>
+                        
+                            <button id="make-payment-btn" class="action-btn">Make payment</button>
+                        </div>
+                    </div>
+                        
                 </div>
             </div>
     </div>     

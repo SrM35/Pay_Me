@@ -17,6 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const expirationDate = document.getElementById('expiration-date').value;
         const securityNumbers = document.getElementById('cvv').value.trim();
 
+        
+
         if (!balance || !numberCard || !nameCardOwner || !expirationDate || !securityNumbers) {
             Swal.fire({
                 icon: 'warning',
@@ -96,6 +98,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         title: 'Card added',
                         text: 'Your card was successfully added!',
                     }).then(() => {
+
+                        localStorage.setItem('numberCard', numberCard);
+                         localStorage.setItem('securityNumbers', securityNumbers);
                         window.location.href = 'dashboard.html';
                     });
                 } else {
