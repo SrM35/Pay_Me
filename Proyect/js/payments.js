@@ -10,12 +10,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const debtInfoElement = document.getElementById('amountPay');
     const companyInfoElement = document.getElementById('companyName');
+    const amountToPay = document.getElementById('amountPay').value;
+    const paymentMethod = document.getElementById('payment-method');
+    const cardInfo = document.getElementById('card-info');
+    
     const debt = debts[0];
+
+    paymentMethod.addEventListener('change', function () {
+        if (this.value === 'account') {
+            console.log('Seleccionaste: Cuenta');
+            cardInfo.style.display = 'none';
+        } else if (this.value === 'card') {
+            console.log('Seleccionaste: Tarjeta');
+            cardInfo.style.display = 'block';
+        }
+    });
+
     if (debtInfoElement) {
         debtInfoElement.value = `$${debt.amountToPay}`;
     }
     if (companyInfoElement) {
-        companyInfoElement.textContent = `Deuda con: ${debt.nameCompany}`;
+        companyInfoElement.textContent = `${debt.nameCompany} - $${debt.amountToPay}`;
     }
 
     const balanceElement = document.getElementById('balance');

@@ -325,7 +325,7 @@ GRANT SELECT ON PayMe.transferences TO 'Paul'@'localhost';
 GRANT SELECT ON PayMe.existingPayments TO 'Paul'@'localhost';
 FLUSH PRIVILEGES;
 */
-CALL SP_ADD_DEBT('NETFLIX', 100);
+-- CALL SP_ADD_DEBT('NETFLIX', 100);
 
 
 -- EJEMPLO PARA PAGOS
@@ -335,6 +335,7 @@ CALL SP_ADD_CARD (500.0, '1234123412341324', 'Rodolfo', '2025-08-12', '555', 'YB
 CALL SP_PAY_DEBT('account', 'NETFLIX', 'jjavier.rojo@gmail.com', 100.0, NULL, NULL);
 CALL SP_PAY_DEBT('card', 'NETFLIX', NULL, '1234123412341324', '555');
 
+SELECT * FROM Account;
 SELECT * FROM debt;
 SELECT * FROM Payments;
 */

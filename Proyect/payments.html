@@ -63,18 +63,20 @@
                                 <option value="account">Account</option>
                                 <option value="card">Card</option>
                             </select>
+
+                            <p id="companyName" class="company">Deuda con:</p>
                         
-                            <p id="companyName" class="company">Deuda con:</p> <
-                            <p class="amount">Amount to Pay:</p>
-                            <input type="text" id="amountPay" readonly>
-                        
-                            <div id="card-info" style="display:none;">
+                            <div id="card-info" class="card-info" style="display: none;">
                                 <label for="card-number">Card Number</label>
                                 <input type="text" id="card-number" placeholder="Enter card number">
                         
                                 <label for="security-numbers">Security Numbers</label>
                                 <input type="text" id="security-numbers" placeholder="Enter security numbers">
                             </div>
+
+                            <p class="amount">Amount to Pay:</p>
+                            <input type="number" id="amountPay" placeholder="$0.00" required>
+                        
                         
                             <button id="make-payment-btn" class="action-btn">Make payment</button>
                         </div>

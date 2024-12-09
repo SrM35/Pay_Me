@@ -6,16 +6,19 @@ import bcrypt from 'bcrypt';
 import connect from './db.js';
 import cors from 'cors';
 
+//App
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
+//Port
 const PORT = process.env.PORT || 3000;
 
-//no mover o si no ya no funciona
+
+
+//Login
 app.post('/login', async (req, res) => {
     let db;
     try {
@@ -86,9 +89,7 @@ app.post('/login', async (req, res) => {
 
 
 
-
-
-
+//View Accounts
 app.get('/Accounts', async (req, res) => {
     let db;
     try {
@@ -110,7 +111,7 @@ app.get('/Accounts', async (req, res) => {
 });
 
 
-//no mover o si no ya no funciona
+//Create Accounts
 app.post('/createAccount', async (req, res) =>{
     let db;
     try {
@@ -136,6 +137,8 @@ app.post('/createAccount', async (req, res) =>{
 });
 
 
+
+//View Cards
 app.get('/Cards', async (req, res) => {
     let db;
     try {
@@ -157,55 +160,13 @@ app.get('/Cards', async (req, res) => {
 });
 
 
-// app.post('/addCard', async (req, res) => {
-//     let db;
-//     try {
-//         const {balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount} = req.body;
-       
-        
-//         if (securityNumbers.length !== 3) {
-//             return res.status(400).json({
-//                 message: 'CVV must be exactly 3 digits',
-//                 status: 400
-//             });
-//         }
-       
-//         db = await connect();
-//         const query = `CALL SP_ADD_CARD(${balance}, ${numberCard}, '${nameCardOwner}', '${expirationDate}', '${securityNumbers}', '${idAccount}')`;
-//         const [rows] = await db.execute(query);
-//         console.log(rows);
-        
-//         res.json({
-//             data: rows,
-//             status: 200
-//         });
-//     } catch(err) {
-//         console.error(err);
-//         res.status(500).json({
-//             message: err.message,
-//             status: 500
-//         });
-//     } finally {
-//         if(db)
-//             db.end();
-//     }
-// });
 
-// 
-
+//Add cards to the logged user
 app.post('/addCard', async (req, res) => {
     let db;
     try {
         
         const { balance, numberCard, nameCardOwner, expirationDate, securityNumbers, idAccount } = req.body;
-
-        /*
-        if (!idAccount) {
-            return res.status(400).json({
-                message: 'Account ID is missing',
-                status: 400
-            });
-        }*/
 
        
         if (!securityNumbers || securityNumbers.length !== 3) {
@@ -245,6 +206,7 @@ app.post('/addCard', async (req, res) => {
 
 
 
+//Tranfere between users
 app.post('/transfere', async (req, res) => {
     let db;
     try {
@@ -297,6 +259,7 @@ app.post('/transfere', async (req, res) => {
     }
 });
 
+//View transfer history
 app.get('/transfer/history/:emailUser', async (req, res) => {
     let db;
     try {
@@ -326,6 +289,9 @@ app.get('/transfer/history/:emailUser', async (req, res) => {
     }
 });
 
+
+
+//Pay service
 app.post('/payment', async (req, res) => {
     let db;
     try {
@@ -353,6 +319,7 @@ app.post('/payment', async (req, res) => {
 });
 
 
+//Connection message
 app.listen(PORT, () => {
     console.log('► Server connected.');
 })
