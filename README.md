@@ -1,4 +1,4 @@
-<h1 align="center">PayMe (online payment system)</h1>
+<h1 align="center">PayMe (online payment system) V1.0.0</h1>
 
 ###
 
