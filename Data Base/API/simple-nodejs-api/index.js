@@ -45,7 +45,6 @@ app.post('/login', async (req, res) => {
 
         const user = rows[0];
         
-        
         console.log('Datos del usuario de la BD:', {
             name: user.nameUser,
             idAccount: user.idAccount,

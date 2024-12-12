@@ -17,10 +17,10 @@ DROP TABLE IF EXISTS Cards;
 CREATE TABLE Cards(
     idCard INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     balance FLOAT NOT NULL,
-    numberCard VARCHAR(16) NOT NULL,
+    numberCard VARCHAR(16) NOT NULL UNIQUE,
     nameCardOwner VARCHAR(100) NOT NULL,
     expirationDate DATE NOT NULL,
-    securityNumbers CHAR(3) NOT NULL UNIQUE,
+    securityNumbers CHAR(3) NOT NULL,
     idAccount CHAR(6) NOT NULL,
     FOREIGN KEY (idAccount) REFERENCES Account(idAccount) ON DELETE CASCADE
 );
