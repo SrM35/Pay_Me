@@ -3,7 +3,7 @@ dotenv.config();
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import connect from './db.js';
 import cors from 'cors';
 
@@ -236,7 +236,7 @@ app.post('/transfere', async (req, res) => {
 
     const originBalance = Number(originRows[0].balance);
 
-    console.log(origin[0].balance, typeof origin[0].balance);
+    console.log(originRows[0].balance, typeof originRows[0].balance);
     console.log(amountTransfer, typeof amountTransfer);
     if (originBalance < amount) {
       return res.status(400).json({ error: 'Saldo insuficiente' });
